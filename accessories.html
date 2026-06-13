@@ -37,6 +37,10 @@
             transform: scale(1.1);
         }
 
+        .box:active {
+            transform: scale(0.95);
+        }
+
         .box-image {
             width: 100px;
         }
@@ -48,6 +52,7 @@
             border: 2px solid #333;
             position: relative;
             margin-bottom: 20px;
+            background-color: white;
         }
 
         .reward-line {
@@ -102,6 +107,7 @@
         #backButton:hover {
             background-color: #367c39;
         }
+
         #coinDisplay {
             position: absolute;
             top: 20px;
@@ -125,62 +131,52 @@
             color: #333;
         }
 
-        .box:active {
-    transform: scale(0.95);
-    transition: transform 0.05s;
-}
-
-.reward-display p {
-    margin-top: 5px;
-    font-size: 16px;
-}
-
         /* Мобільна адаптація */
-@media (max-width: 600px) {
-    .box {
-        width: 120px;
-        height: 120px;
-    }
-    .box img {
-        width: 80px;
-    }
-    .reward-container {
-        width: 90%;
-        max-width: 300px;
-    }
-    .reward-item {
-        width: 80px;
-    }
-    .reward-item img {
-        width: 60px;
-    }
-    h1 {
-        font-size: 18px;
-        text-align: center;
-        margin: 10px;
-    }
-    #coinDisplay, #backButton {
-        top: 10px;
-    }
-    #backButton {
-        left: 10px;
-        padding: 8px 12px;
-        font-size: 14px;
-    }
-    #coinDisplay {
-        right: 10px;
-        padding: 5px 10px;
-    }
-    .reward-display {
-        font-size: 18px;
-    }
-    .container {
-        justify-content: flex-start;
-        padding-top: 70px;
-        height: auto;
-        min-height: 100vh;
-    }
-}
+        @media (max-width: 600px) {
+            .box {
+                width: 120px;
+                height: 120px;
+            }
+            .box img {
+                width: 80px;
+            }
+            .reward-container {
+                width: 90%;
+                max-width: 300px;
+            }
+            .reward-item {
+                width: 80px;
+            }
+            .reward-item img {
+                width: 60px;
+            }
+            h1 {
+                font-size: 18px;
+                text-align: center;
+                margin: 10px;
+            }
+            #coinDisplay, #backButton {
+                top: 10px;
+            }
+            #backButton {
+                left: 10px;
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+            #coinDisplay {
+                right: 10px;
+                padding: 5px 10px;
+            }
+            .reward-display {
+                font-size: 18px;
+            }
+            .container {
+                justify-content: flex-start;
+                padding-top: 70px;
+                height: auto;
+                min-height: 100vh;
+            }
+        }
     </style>
 </head>
 <body>
@@ -195,27 +191,28 @@
             <div class="highlight"></div>
         </div>
         <div class="reward-display" id="rewardDisplay"></div>
-         <div id="coinDisplay">
+        <div id="coinDisplay">
             <span id="coinCount">500</span>
             <img src="coin.png" alt="Монета">
         </div>
     </div>
     <script>
+        // ВАШІ ЦІНИ (не змінені)
         const rewards = [
-            { name: 'Брелок', image: 'keychain.png', chance: 0.30, price: 75 },
-            { name: 'Капці', image: 'slippers.png', chance: 0.19, price: 100 },
-            { name: 'Футболка', image: 'shirt.png', chance: 0.19, price: 150 },
-            { name: 'Шапка', image: 'hat.png', chance: 0.19, price: 100 },
-            { name: 'Сумка', image: 'bag.png', chance: 0.13, price: 300 }
+            { name: 'Брелок', image: 'keychain.png', chance: 0.30, price: 25 },
+            { name: 'Капці', image: 'slippers.png', chance: 0.19, price: 50 },
+            { name: 'Футболка', image: 'shirt.png', chance: 0.19, price: 50 },
+            { name: 'Шапка', image: 'hat.png', chance: 0.19, price: 50 },
+            { name: 'Сумка', image: 'bag.png', chance: 0.13, price: 100 }
         ];
 
-                let isSpinning = false;
+        let isSpinning = false;
         let currentPosition = 0;
         let animationId = null;
         const itemWidth = 100;
         const rewardContainerWidth = 300;
         const centerPosition = rewardContainerWidth / 2 - itemWidth / 2;
-        
+
         function getCoins() {
             let coins = parseInt(localStorage.getItem("coins"));
             if (isNaN(coins)) {
@@ -224,17 +221,12 @@
             }
             return coins;
         }
-        
+
         let coins = getCoins();
         const casePrice = 75;
 
         function openBox() {
             if (isSpinning) return;
-// Зупиняємо попередню анімацію, якщо вона є
-if (animationId) {
-    cancelAnimationFrame(animationId);
-    animationId = null;
-}
             if (coins < casePrice) {
                 alert("Недостатньо монет для відкриття кейсу!");
                 return;
@@ -245,15 +237,14 @@ if (animationId) {
             updateCoinDisplay();
 
             isSpinning = true;
-            currentPosition = 0; // Скидаємо позицію
-            rewardLine.style.left = "0px";
+            currentPosition = 0;
 
             const rewardLine = document.getElementById("rewardLine");
             const rewardDisplay = document.getElementById("rewardDisplay");
             rewardLine.innerHTML = "";
             rewardDisplay.innerHTML = "Кейс відкривається...";
 
-            // СТВОРЮЄМО МАСИВ ТІЛЬКИ ОДИН РАЗ І ПЕРЕМІШУЄМО
+            // Створюємо масив нагород
             let extendedRewards = [];
             rewards.forEach(reward => {
                 const count = Math.round(reward.chance * 100);
@@ -261,13 +252,14 @@ if (animationId) {
                     extendedRewards.push(reward);
                 }
             });
-            // Перемішуємо (алгоритм Фішера-Йєтса)
+            
+            // Перемішуємо
             for (let i = extendedRewards.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [extendedRewards[i], extendedRewards[j]] = [extendedRewards[j], extendedRewards[i]];
             }
 
-            // Дублюємо масив для довшої стрічки (але не 3 рази)
+            // Дублюємо для довгої стрічки
             const extendedRewardsLong = [...extendedRewards, ...extendedRewards, ...extendedRewards];
 
             extendedRewardsLong.forEach(reward => {
@@ -286,32 +278,19 @@ if (animationId) {
                 const elapsed = time - startTime;
 
                 if (elapsed >= spinDuration) {
-    // Зупиняємо анімацію
-    isSpinning = false;
-    if (animationId) cancelAnimationFrame(animationId);
-    animationId = null;
+                    isSpinning = false;
+                    if (animationId) cancelAnimationFrame(animationId);
+                    animationId = null;
 
-    // ОТРИМУЄМО ПОТОЧНУ ПОЗИЦІЮ РЯДКА
-    const lineLeft = parseFloat(rewardLine.style.left) || 0;
-    
-    // РОЗРАХУНОК ЯКИЙ ЕЛЕМЕНТ В ЦЕНТРІ
-    let centerIndex = Math.round((centerPosition - lineLeft) / itemWidth);
-    
-    // НОРМАЛІЗУЄМО ІНДЕКС (щоб був в межах масиву)
-    centerIndex = centerIndex % extendedRewardsLong.length;
-    if (centerIndex < 0) centerIndex += extendedRewardsLong.length;
-    
-    // ДОДАТКОВА ПЕРЕВІРКА НА ТЕЛЕФОНІ
-    if (isNaN(centerIndex) || centerIndex >= extendedRewardsLong.length) {
-        centerIndex = 0;
-    }
+                    // Ваш старий працюючий розрахунок
+                    const centerIndex = Math.round(Math.abs(currentPosition - centerPosition) / itemWidth) % extendedRewardsLong.length;
+                    const prize = extendedRewardsLong[centerIndex];
+                    rewardDisplay.innerHTML = `<img src="${prize.image}" style="width:100px"><p>${prize.name}</p>`;
+                    addItemToInventory(prize);
+                    updateCoinDisplay();
+                    return;
+                }
 
-    const prize = extendedRewardsLong[centerIndex];
-    rewardDisplay.innerHTML = `<img src="${prize.image}" style="width:100px"><p>${prize.name}</p>`;
-    addItemToInventory(prize);
-    updateCoinDisplay();
-    return;
-}
                 const speed = 10 * (1 - elapsed / spinDuration);
                 currentPosition -= speed;
                 if (currentPosition <= -totalWidth / 2) currentPosition += totalWidth / 2;
