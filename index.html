@@ -85,6 +85,77 @@
                 font-size: 20px;
             }
         }
+
+        /* ===== АНІМАЦІЇ ДЛЯ ГОЛОВНОГО МЕНЮ ===== */
+
+/* 1. Плавна поява сторінки */
+body {
+    animation: fadeInPage 0.8s ease-out;
+}
+
+@keyframes fadeInPage {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* 2. Анімація для картинок меню - піднімання при наведенні */
+.menu-item img {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.menu-item img:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+}
+
+/* 3. Ефект натискання */
+.menu-item img:active {
+    transform: scale(0.95);
+    transition: transform 0.05s;
+}
+
+/* 4. Анімація появи кожної кнопки по черзі */
+.menu-item:nth-child(1) {
+    animation: slideInLeft 0.5s ease-out 0.2s both;
+}
+
+.menu-item:nth-child(2) {
+    animation: slideInLeft 0.5s ease-out 0.4s both;
+}
+
+.menu-item:nth-child(3) {
+    animation: slideInLeft 0.5s ease-out 0.6s both;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 5. Легке пульсування заголовка */
+h1 {
+    animation: titlePulse 2s ease-in-out infinite;
+}
+
+@keyframes titlePulse {
+    0%, 100% {
+        text-shadow: 0 0 0px rgba(0,0,0,0.1);
+    }
+    50% {
+        text-shadow: 0 0 10px rgba(102,126,234,0.5);
+    }
+}
+
     </style>
 </head>
 <body>

@@ -230,6 +230,11 @@
 
         function openBox() {
             if (isSpinning) return;
+// Зупиняємо попередню анімацію, якщо вона є
+if (animationId) {
+    cancelAnimationFrame(animationId);
+    animationId = null;
+}
             if (coins < casePrice) {
                 alert("Недостатньо монет для відкриття кейсу!");
                 return;
@@ -241,6 +246,7 @@
 
             isSpinning = true;
             currentPosition = 0; // Скидаємо позицію
+            rewardLine.style.left = "0px";
 
             const rewardLine = document.getElementById("rewardLine");
             const rewardDisplay = document.getElementById("rewardDisplay");
@@ -280,22 +286,32 @@
                 const elapsed = time - startTime;
 
                 if (elapsed >= spinDuration) {
-                    // Зупиняємо анімацію
-                    isSpinning = false;
-                    if (animationId) cancelAnimationFrame(animationId);
-                    animationId = null;
+    // Зупиняємо анімацію
+    isSpinning = false;
+    if (animationId) cancelAnimationFrame(animationId);
+    animationId = null;
 
-                    // ПРАВИЛЬНИЙ РОЗРАХУНОК ІНДЕКСУ ЦЕНТРАЛЬНОГО ЕЛЕМЕНТА
-                    const rawIndex = Math.round((centerPosition - currentPosition) / itemWidth);
-                    let centerIndex = rawIndex % extendedRewardsLong.length;
-                    if (centerIndex < 0) centerIndex += extendedRewardsLong.length;
+    // ОТРИМУЄМО ПОТОЧНУ ПОЗИЦІЮ РЯДКА
+    const lineLeft = parseFloat(rewardLine.style.left) || 0;
+    
+    // РОЗРАХУНОК ЯКИЙ ЕЛЕМЕНТ В ЦЕНТРІ
+    let centerIndex = Math.round((centerPosition - lineLeft) / itemWidth);
+    
+    // НОРМАЛІЗУЄМО ІНДЕКС (щоб був в межах масиву)
+    centerIndex = centerIndex % extendedRewardsLong.length;
+    if (centerIndex < 0) centerIndex += extendedRewardsLong.length;
+    
+    // ДОДАТКОВА ПЕРЕВІРКА НА ТЕЛЕФОНІ
+    if (isNaN(centerIndex) || centerIndex >= extendedRewardsLong.length) {
+        centerIndex = 0;
+    }
 
-                    const prize = extendedRewardsLong[centerIndex];
-                    rewardDisplay.innerHTML = `<img src="${prize.image}" style="width:100px"><p>${prize.name}</p>`;
-                    addItemToInventory(prize);
-                    updateCoinDisplay();
-                    return;
-                }
+    const prize = extendedRewardsLong[centerIndex];
+    rewardDisplay.innerHTML = `<img src="${prize.image}" style="width:100px"><p>${prize.name}</p>`;
+    addItemToInventory(prize);
+    updateCoinDisplay();
+    return;
+}
 
                 const speed = 10 * (1 - elapsed / spinDuration);
                 currentPosition -= speed;
