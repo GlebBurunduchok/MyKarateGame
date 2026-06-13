@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кликер</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Клікер</title>
     <style>
+        * {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -17,15 +22,16 @@
             min-height: 100vh;
             padding-top: 60px;
             box-sizing: border-box;
-            position: relative;
         }
 
         .container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 100px; /* Увеличиваем отступ сверху, чтобы объекты были ниже */
+            justify-content: center;
             width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         h1 {
@@ -36,27 +42,23 @@
         }
 
         .click-image {
-            width: 200px; /* Увеличиваем размер кликера */
+            width: 200px;
             height: 200px;
             border-radius: 50%;
             cursor: pointer;
             transition: transform 0.2s ease;
-            margin-bottom: 30px; /* Увеличиваем отступ снизу */
-            align-self: center;
-        }
-
-        .click-image:hover {
-            transform: scale(1.1);
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         .click-image:active {
-            transform: scale(0.9);
+            transform: scale(0.95);
         }
 
         #clickCount {
             font-size: 20px;
             color: #333;
-            margin-bottom: 30px; /* Увеличиваем отступ снизу */
+            margin-bottom: 30px;
             text-align: center;
         }
 
@@ -72,6 +74,7 @@
             cursor: pointer;
             font-size: 16px;
             text-decoration: none;
+            z-index: 1000;
         }
 
         #backButton:hover {
@@ -84,7 +87,7 @@
             right: 20px;
             display: flex;
             align-items: center;
-            background-color: rgba(255, 255, 255, 0.7);
+            background-color: rgba(255, 255, 255, 0.9);
             padding: 10px 20px;
             border-radius: 30px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -92,46 +95,98 @@
         }
 
         #coinDisplay img {
-            width: 40px;
-            margin-left: 10px;
+            width: 30px;
+            margin-left: 8px;
         }
 
-        #coinCount {
-            font-size: 24px;
+        #coinCountDisplay {
+            font-size: 22px;
             font-weight: bold;
             color: #333;
+        }
+
+        /* Мобільна адаптація */
+        @media (max-width: 600px) {
+            body {
+                padding-top: 70px;
+            }
+            .click-image {
+                width: 180px;
+                height: 180px;
+            }
+            h1 {
+                font-size: 22px;
+            }
+            #clickCount {
+                font-size: 16px;
+                margin: 0 15px 30px;
+            }
+            #backButton {
+                top: 10px;
+                left: 10px;
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+            #coinDisplay {
+                top: 10px;
+                right: 10px;
+                padding: 5px 12px;
+            }
+            #coinCountDisplay {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .click-image {
+                width: 150px;
+                height: 150px;
+            }
         }
     </style>
 </head>
 <body>
     <a href="index.html" id="backButton">Назад</a>
     <div class="container">
-        <h1>КЛИКЕР</h1>
-        <img src="coin.png" alt="Кликни сюда" class="click-image" id="clickImage">
-        <p id="clickCount">Нажми на картинку, чтобы получить монеты!</p>
+        <h1>КЛІКЕР</h1>
+        <img src="coin.png" alt="Клацни сюди" class="click-image" id="clickImage">
+        <p id="clickCount">Натисни на картинку, щоб отримати монети!</p>
         <div id="coinDisplay">
             <span id="coinCountDisplay">0</span>
             <img src="coin.png" alt="Монета">
         </div>
     </div>
     <script>
-        const clickImage = document.getElementById("clickImage");
-        const coinCountDisplay = document.getElementById("coinCountDisplay");
-        let coins = parseInt(localStorage.getItem("coins")) || 0;
+        // Функція для отримання монет з єдиним стартовим значенням 500
+        function getCoins() {
+            let coins = parseInt(localStorage.getItem("coins"));
+            if (isNaN(coins)) {
+                coins = 500;
+                localStorage.setItem("coins", coins);
+            }
+            return coins;
+        }
 
-        clickImage.addEventListener("click", function() {
-            coins++;
+        function setCoins(coins) {
             localStorage.setItem("coins", coins);
-            coinCountDisplay.textContent = coins;
-        });
+        }
 
         function updateCoinDisplay() {
-            coins = parseInt(localStorage.getItem("coins")) || 0;
-            coinCountDisplay.textContent = coins;
+            const coinDisplaySpan = document.getElementById("coinCountDisplay");
+            if (coinDisplaySpan) {
+                coinDisplaySpan.textContent = getCoins();
+            }
         }
+
+        const clickImage = document.getElementById("clickImage");
+        clickImage.addEventListener("click", function() {
+            let coins = getCoins();
+            coins++;
+            setCoins(coins);
+            updateCoinDisplay();
+        });
 
         updateCoinDisplay();
     </script>
 </body>
 </html>
-

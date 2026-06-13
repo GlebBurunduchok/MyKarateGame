@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CASE "ACCESSORIES" - 75 монет</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>КЕЙС "ACCESSORIES" - 75 монет</title>
     <style>
         body, html {
             margin: 0;
@@ -125,14 +125,70 @@
             color: #333;
         }
 
+        .box:active {
+    transform: scale(0.95);
+    transition: transform 0.05s;
+}
+
+.reward-display p {
+    margin-top: 5px;
+    font-size: 16px;
+}
+
+        /* Мобільна адаптація */
+@media (max-width: 600px) {
+    .box {
+        width: 120px;
+        height: 120px;
+    }
+    .box img {
+        width: 80px;
+    }
+    .reward-container {
+        width: 90%;
+        max-width: 300px;
+    }
+    .reward-item {
+        width: 80px;
+    }
+    .reward-item img {
+        width: 60px;
+    }
+    h1 {
+        font-size: 18px;
+        text-align: center;
+        margin: 10px;
+    }
+    #coinDisplay, #backButton {
+        top: 10px;
+    }
+    #backButton {
+        left: 10px;
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+    #coinDisplay {
+        right: 10px;
+        padding: 5px 10px;
+    }
+    .reward-display {
+        font-size: 18px;
+    }
+    .container {
+        justify-content: flex-start;
+        padding-top: 70px;
+        height: auto;
+        min-height: 100vh;
+    }
+}
     </style>
 </head>
 <body>
     <a href="cases.html" id="backButton">Назад</a>
     <div class="container">
-        <h1>CASE "ACCESSORIES" - 75 монет</h1>
+        <h1>КЕЙС "ACCESSORIES" - 75 монет</h1>
         <div class="box" onclick="openBox()">
-            <img src="case_accessories.png" alt="Box">
+            <img src="case_accessories.png" alt="Кейс">
         </div>
         <div class="reward-container" id="rewardContainer">
             <div class="reward-line" id="rewardLine"></div>
@@ -145,27 +201,37 @@
         </div>
     </div>
     <script>
-       const rewards = [
+        const rewards = [
             { name: 'Брелок', image: 'keychain.png', chance: 0.30, price: 25 },
-            { name: 'Тапки', image: 'slippers.png', chance: 0.19, price: 50  },
+            { name: 'Капці', image: 'slippers.png', chance: 0.19, price: 50 },
             { name: 'Футболка', image: 'shirt.png', chance: 0.19, price: 50 },
             { name: 'Шапка', image: 'hat.png', chance: 0.19, price: 50 },
             { name: 'Сумка', image: 'bag.png', chance: 0.13, price: 100 }
         ];
 
-        let isSpinning = false;
+                let isSpinning = false;
         let currentPosition = 0;
+        let animationId = null;
         const itemWidth = 100;
         const rewardContainerWidth = 300;
         const centerPosition = rewardContainerWidth / 2 - itemWidth / 2;
-        let spinInterval;
-        let coins = parseInt(localStorage.getItem("coins")) || 500;
+        
+        function getCoins() {
+            let coins = parseInt(localStorage.getItem("coins"));
+            if (isNaN(coins)) {
+                coins = 500;
+                localStorage.setItem("coins", coins);
+            }
+            return coins;
+        }
+        
+        let coins = getCoins();
         const casePrice = 75;
 
         function openBox() {
             if (isSpinning) return;
             if (coins < casePrice) {
-                alert("Недостаточно монет для открытия кейса!");
+                alert("Недостатньо монет для відкриття кейсу!");
                 return;
             }
 
@@ -174,33 +240,31 @@
             updateCoinDisplay();
 
             isSpinning = true;
+            currentPosition = 0; // Скидаємо позицію
+
             const rewardLine = document.getElementById("rewardLine");
             const rewardDisplay = document.getElementById("rewardDisplay");
             rewardLine.innerHTML = "";
-            rewardDisplay.innerHTML = "Кейс открывается...";
+            rewardDisplay.innerHTML = "Кейс відкривається...";
 
-            const extendedRewards = [];
+            // СТВОРЮЄМО МАСИВ ТІЛЬКИ ОДИН РАЗ І ПЕРЕМІШУЄМО
+            let extendedRewards = [];
             rewards.forEach(reward => {
                 const count = Math.round(reward.chance * 100);
                 for (let i = 0; i < count; i++) {
                     extendedRewards.push(reward);
                 }
             });
-            extendedRewards.sort(() => Math.random() - 0.5);
-             rewards.forEach(reward => {
-                const count = Math.round(reward.chance * 100);
-                for (let i = 0; i < count; i++) {
-                    extendedRewards.push(reward);
-                }
-            });
-             rewards.forEach(reward => {
-                const count = Math.round(reward.chance * 100);
-                for (let i = 0; i < count; i++) {
-                    extendedRewards.push(reward);
-                }
-            });
+            // Перемішуємо (алгоритм Фішера-Йєтса)
+            for (let i = extendedRewards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [extendedRewards[i], extendedRewards[j]] = [extendedRewards[j], extendedRewards[i]];
+            }
 
-            extendedRewards.forEach(reward => {
+            // Дублюємо масив для довшої стрічки (але не 3 рази)
+            const extendedRewardsLong = [...extendedRewards, ...extendedRewards, ...extendedRewards];
+
+            extendedRewardsLong.forEach(reward => {
                 const item = document.createElement("div");
                 item.className = "reward-item";
                 item.innerHTML = `<img src="${reward.image}" alt="${reward.name}">`;
@@ -209,17 +273,25 @@
 
             let startTime = null;
             const spinDuration = 3000;
-            const totalWidth = extendedRewards.length * itemWidth;
+            const totalWidth = extendedRewardsLong.length * itemWidth;
 
             function animateSpin(time) {
                 if (!startTime) startTime = time;
                 const elapsed = time - startTime;
 
                 if (elapsed >= spinDuration) {
+                    // Зупиняємо анімацію
                     isSpinning = false;
-                    const centerIndex = Math.round(Math.abs(currentPosition - centerPosition) / itemWidth) % extendedRewards.length;
-                    const prize = extendedRewards[centerIndex];
-                    rewardDisplay.innerHTML = `<img src="${prize.image}" alt="${prize.name}" style="width: 100px;"><p>${prize.name}</p>`;
+                    if (animationId) cancelAnimationFrame(animationId);
+                    animationId = null;
+
+                    // ПРАВИЛЬНИЙ РОЗРАХУНОК ІНДЕКСУ ЦЕНТРАЛЬНОГО ЕЛЕМЕНТА
+                    const rawIndex = Math.round((centerPosition - currentPosition) / itemWidth);
+                    let centerIndex = rawIndex % extendedRewardsLong.length;
+                    if (centerIndex < 0) centerIndex += extendedRewardsLong.length;
+
+                    const prize = extendedRewardsLong[centerIndex];
+                    rewardDisplay.innerHTML = `<img src="${prize.image}" style="width:100px"><p>${prize.name}</p>`;
                     addItemToInventory(prize);
                     updateCoinDisplay();
                     return;
@@ -230,9 +302,10 @@
                 if (currentPosition <= -totalWidth / 2) currentPosition += totalWidth / 2;
                 rewardLine.style.left = currentPosition + "px";
 
-                requestAnimationFrame(animateSpin);
+                animationId = requestAnimationFrame(animateSpin);
             }
-            requestAnimationFrame(animateSpin);
+
+            animationId = requestAnimationFrame(animateSpin);
         }
 
         function addItemToInventory(item) {
@@ -240,6 +313,7 @@
             inventory.push(item);
             localStorage.setItem("inventory", JSON.stringify(inventory));
         }
+
         function updateCoinDisplay() {
             const coinDisplay = document.getElementById("coinCount");
             if (coinDisplay) {

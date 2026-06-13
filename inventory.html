@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Инвентарь</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Інвентар</title>
     <style>
         body, html {
             margin: 0;
@@ -130,16 +130,58 @@
             font-weight: bold;
             color: #333;
         }
+
+        /* Мобільна адаптація */
+@media (max-width: 600px) {
+    .inventory-grid {
+        gap: 12px;
+        padding: 0 10px;
+    }
+    .inventory-item {
+        padding: 8px;
+    }
+    .inventory-item img {
+        width: 60px;
+    }
+    .sell-button {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    h1 {
+        font-size: 20px;
+        margin-top: 10px;
+    }
+    #coinDisplay, #backButton {
+        top: 10px;
+    }
+    #backButton {
+        left: 10px;
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+    #coinDisplay {
+        right: 10px;
+        padding: 5px 10px;
+    }
+    .container {
+        padding-top: 60px;
+    }
+    .no-items-message {
+        font-size: 16px;
+        padding: 0 20px;
+    }
+}
     </style>
 </head>
 <body>
     <a href="index.html" id="backButton">Назад</a>
     <div class="container">
-        <h1>Ваш Инвентарь</h1>
+        <h1>Ваш Інвентар</h1>
         <div class="inventory-grid" id="inventoryGrid">
         </div>
-        <p id="noItemsMessage" class="no-items-message">В вашем инвентаре пока нет предметов.</p>
-        <div id="coinDisplay">  <span id="coinCount">500</span>
+        <p id="noItemsMessage" class="no-items-message">У вашому інвентарі поки немає предметів.</p>
+        <div id="coinDisplay">
+            <span id="coinCount">500</span>
             <img src="coin.png" alt="Монета">
         </div>
     </div>
@@ -148,23 +190,31 @@
         const noItemsMessage = document.getElementById("noItemsMessage");
         const coinCountDisplay = document.getElementById("coinCount");
 
-        // Цены предметов
+        // Ціни предметів
         const itemPrices = {
-            'Перчатки': 300,
-            'Футы': 300,
-            'Кимоно': 500,
+            'Рукавиці': 300,
+            'Наколінники': 300,
+            'Кімоно': 500,
             'Пояс': 100,
-            'Шлем': 100,
+            'Шолом': 100,
             'Брелок': 25,
-            'Тапки': 50,
+            'Капці': 50,
             'Футболка': 50,
             'Шапка': 50,
             'Сумка': 100
         };
 
-        // Получаем данные инвентаря и баланс монет из localStorage
+        // Отримуємо дані інвентарю та баланс монет з localStorage
         let inventory = JSON.parse(localStorage.getItem("inventory")) || [];
-        let coins = parseInt(localStorage.getItem("coins")) || 500;
+        function getCoins() {
+    let coins = parseInt(localStorage.getItem("coins"));
+    if (isNaN(coins)) {
+        coins = 500;
+        localStorage.setItem("coins", coins);
+    }
+    return coins;
+}
+let coins = getCoins();
 
         function displayInventory() {
             if (inventory.length === 0) {
@@ -194,12 +244,12 @@
                         <img src="${item.image}" alt="${item.name}">
                         <p>${item.name} (${itemPrices[item.name]} монет)</p>
                         ${item.count > 1 ? `<span class="item-count">x${item.count}</span>` : ''}
-                        <button class="sell-button" data-item-name="${item.name}">Продать</button>
+                        <button class="sell-button" data-item-name="${item.name}">Продати</button>
                     `;
                     inventoryGrid.appendChild(itemDiv);
                 }
 
-                // Добавляем обработчики для кнопок "Продать"
+                // Додаємо обробники для кнопок "Продати"
                 const sellButtons = document.querySelectorAll('.sell-button');
                 sellButtons.forEach(button => {
                     button.addEventListener('click', function() {
@@ -214,17 +264,17 @@
         function sellItem(itemName) {
             const itemPrice = itemPrices[itemName];
             if (itemPrice === undefined) {
-                alert("Невозможно продать этот предмет.");
+                alert("Неможливо продати цей предмет.");
                 return;
             }
 
-            // Удаляем проданный предмет из инвентаря
+            // Видаляємо проданий предмет з інвентарю
             const itemIndex = inventory.findIndex(item => item.name === itemName);
             if (itemIndex > -1) {
                 inventory.splice(itemIndex, 1);
                 localStorage.setItem("inventory", JSON.stringify(inventory));
 
-                // Добавляем монеты на баланс
+                // Додаємо монети на баланс
                 coins += itemPrice;
                 localStorage.setItem("coins", coins);
 

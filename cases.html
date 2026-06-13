@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CASE OPENER</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ВІДКРИВАННЯ КЕЙСІВ</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -103,18 +103,43 @@
             font-weight: bold;
             color: #333;
         }
+
+        @media (max-width: 600px) {
+    .menu-item img {
+        width: 80px;
+        height: 80px;
+    }
+    h1 {
+        font-size: 18px;
+        margin: 10px;
+    }
+    #coinDisplay {
+        top: 10px;
+        right: 10px;
+        padding: 5px 10px;
+    }
+    #backButton {
+        top: 10px;
+        left: 10px;
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+    .container {
+        padding-top: 60px; /* щоб не перекривало кнопкою */
+    }
+}
     </style>
 </head>
 <body>
     <a href="index.html" id="backButton">Назад</a>
     <div class="container">
-        <h1>Выберите кейс для открытия</h1>
+        <h1>Виберіть кейс для відкриття</h1>
         <div class="menu">
             <a href="amunition.html" class="menu-item">
-                <img src="case_amunition.png" alt="Амуниция">
+                <img src="case_amunition.png" alt="Амуніція">
             </a>
             <a href="accessories.html" class="menu-item">
-                <img src="case_accessories.png" alt="Аксессуары">
+                <img src="case_accessories.png" alt="Аксесуари">
             </a>
             <a href="#" class="menu-item">
                 <img src="case_soon.png" alt="Скоро">
@@ -126,12 +151,19 @@
         </div>
     </div>
     <script>
-        const coinCountDisplay = document.getElementById("coinCount");
-        let coins = parseInt(localStorage.getItem("coins")) || 0;
+                const coinCountDisplay = document.getElementById("coinCount");
+
+        function getCoins() {
+            let coins = parseInt(localStorage.getItem("coins"));
+            if (isNaN(coins)) {
+                coins = 500;
+                localStorage.setItem("coins", coins);
+            }
+            return coins;
+        }
 
         function updateCoinDisplay() {
-            coins = parseInt(localStorage.getItem("coins")) || 0;
-            coinCountDisplay.textContent = coins;
+            coinCountDisplay.textContent = getCoins();
         }
 
         updateCoinDisplay();
