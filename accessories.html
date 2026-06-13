@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CASE "ACCESSORIES" - 75 монет</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .box {
+            width: 150px;
+            height: 150px;
+            background-color: #d4af37;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .box:hover {
+            transform: scale(1.1);
+        }
+
+        .box-image {
+            width: 100px;
+        }
+
+        .reward-container {
+            width: 300px;
+            height: 100px;
+            overflow: hidden;
+            border: 2px solid #333;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .reward-line {
+            display: flex;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .reward-item {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .reward-item img {
+            width: 80px;
+        }
+
+        .reward-display {
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+        }
+
+        .highlight {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 100%;
+            background-color: red;
+        }
+
+        #backButton {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        #backButton:hover {
+            background-color: #367c39;
+        }
+        #coinDisplay {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 8px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #coinDisplay img {
+            width: 30px;
+            margin-left: 5px;
+        }
+
+        #coinCount {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+    </style>
+</head>
+<body>
+    <a href="cases.html" id="backButton">Назад</a>
+    <div class="container">
+        <h1>CASE "ACCESSORIES" - 75 монет</h1>
+        <div class="box" onclick="openBox()">
+            <img src="case_accessories.png" alt="Box">
+        </div>
+        <div class="reward-container" id="rewardContainer">
+            <div class="reward-line" id="rewardLine"></div>
+            <div class="highlight"></div>
+        </div>
+        <div class="reward-display" id="rewardDisplay"></div>
+         <div id="coinDisplay">
+            <span id="coinCount">500</span>
+            <img src="coin.png" alt="Монета">
+        </div>
+    </div>
+    <script>
+       const rewards = [
+            { name: 'Брелок', image: 'keychain.png', chance: 0.30, price: 25 },
+            { name: 'Тапки', image: 'slippers.png', chance: 0.19, price: 50  },
+            { name: 'Футболка', image: 'shirt.png', chance: 0.19, price: 50 },
+            { name: 'Шапка', image: 'hat.png', chance: 0.19, price: 50 },
+            { name: 'Сумка', image: 'bag.png', chance: 0.13, price: 100 }
+        ];
+
+        let isSpinning = false;
+        let currentPosition = 0;
+        const itemWidth = 100;
+        const rewardContainerWidth = 300;
+        const centerPosition = rewardContainerWidth / 2 - itemWidth / 2;
+        let spinInterval;
+        let coins = parseInt(localStorage.getItem("coins")) || 500;
+        const casePrice = 75;
+
+        function openBox() {
+            if (isSpinning) return;
+            if (coins < casePrice) {
+                alert("Недостаточно монет для открытия кейса!");
+                return;
+            }
+
+            coins -= casePrice;
+            localStorage.setItem("coins", coins);
+            updateCoinDisplay();
+
+            isSpinning = true;
+            const rewardLine = document.getElementById("rewardLine");
+            const rewardDisplay = document.getElementById("rewardDisplay");
+            rewardLine.innerHTML = "";
+            rewardDisplay.innerHTML = "Кейс открывается...";
+
+            const extendedRewards = [];
+            rewards.forEach(reward => {
+                const count = Math.round(reward.chance * 100);
+                for (let i = 0; i < count; i++) {
+                    extendedRewards.push(reward);
+                }
+            });
+            extendedRewards.sort(() => Math.random() - 0.5);
+             rewards.forEach(reward => {
+                const count = Math.round(reward.chance * 100);
+                for (let i = 0; i < count; i++) {
+                    extendedRewards.push(reward);
+                }
+            });
+             rewards.forEach(reward => {
+                const count = Math.round(reward.chance * 100);
+                for (let i = 0; i < count; i++) {
+                    extendedRewards.push(reward);
+                }
+            });
+
+            extendedRewards.forEach(reward => {
+                const item = document.createElement("div");
+                item.className = "reward-item";
+                item.innerHTML = `<img src="${reward.image}" alt="${reward.name}">`;
+                rewardLine.appendChild(item);
+            });
+
+            let startTime = null;
+            const spinDuration = 3000;
+            const totalWidth = extendedRewards.length * itemWidth;
+
+            function animateSpin(time) {
+                if (!startTime) startTime = time;
+                const elapsed = time - startTime;
+
+                if (elapsed >= spinDuration) {
+                    isSpinning = false;
+                    const centerIndex = Math.round(Math.abs(currentPosition - centerPosition) / itemWidth) % extendedRewards.length;
+                    const prize = extendedRewards[centerIndex];
+                    rewardDisplay.innerHTML = `<img src="${prize.image}" alt="${prize.name}" style="width: 100px;"><p>${prize.name}</p>`;
+                    addItemToInventory(prize);
+                    updateCoinDisplay();
+                    return;
+                }
+
+                const speed = 10 * (1 - elapsed / spinDuration);
+                currentPosition -= speed;
+                if (currentPosition <= -totalWidth / 2) currentPosition += totalWidth / 2;
+                rewardLine.style.left = currentPosition + "px";
+
+                requestAnimationFrame(animateSpin);
+            }
+            requestAnimationFrame(animateSpin);
+        }
+
+        function addItemToInventory(item) {
+            let inventory = JSON.parse(localStorage.getItem("inventory")) || [];
+            inventory.push(item);
+            localStorage.setItem("inventory", JSON.stringify(inventory));
+        }
+        function updateCoinDisplay() {
+            const coinDisplay = document.getElementById("coinCount");
+            if (coinDisplay) {
+                coinDisplay.textContent = coins;
+            }
+        }
+
+        updateCoinDisplay();
+    </script>
+</body>
+</html>

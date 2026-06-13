@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CASE OPENER</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex; /* Используем flexbox для центрирования контента */
+            flex-direction: column;
+            align-items: center; /* Горизонтальное центрирование */
+            justify-content: center; /* Вертикальное центрирование */
+            min-height: 100vh; /* Обеспечиваем, что контент занимает всю высоту экрана */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto; /* Убираем верхний отступ, центрируем по горизонтали */
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: flex; /* Используем flexbox для центрирования элементов меню */
+            flex-direction: column;
+            align-items: center; /* Горизонтальное центрирование элементов меню */
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center; /* Размещаем элементы горизонтально по центру */
+            align-items: center; /* Выравниваем элементы вертикально по центру */
+            margin-bottom: 0; /* Убираем нижний отступ */
+        }
+
+        .menu-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        .menu-item img {
+            width: 150px;
+            height: 150px;
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-item img:hover {
+            transform: scale(1.1);
+        }
+
+        .menu-item span {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CASE SIMULATOR</h1>
+        <div class="menu">
+            <a href="cases.html" class="menu-item">
+                <img src="box.png" alt="Открывать кейсы">
+            </a>
+            <a href="inventory.html" class="menu-item">
+                <img src="inventory_image.jpg" alt="Инвентарь">
+            </a>
+            <a href="clicker.html" class="menu-item">
+                <img src="coin_clicker.png" alt="Кликер">
+            </a>
+        </div>
+    </div>
+</body>
+</html>

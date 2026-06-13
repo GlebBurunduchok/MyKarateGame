@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CASE OPENER</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .menu-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        .menu-item img {
+            width: 100px;
+            height: 100px;
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-item img:hover {
+            transform: scale(1.1);
+        }
+
+        .menu-item span {
+            display: none;
+        }
+
+        #backButton {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        #backButton:hover {
+            background-color: #367c39;
+        }
+
+        #coinDisplay {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 8px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        #coinDisplay img {
+            width: 30px;
+            margin-left: 5px;
+        }
+
+        #coinCount {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" id="backButton">Назад</a>
+    <div class="container">
+        <h1>Выберите кейс для открытия</h1>
+        <div class="menu">
+            <a href="amunition.html" class="menu-item">
+                <img src="case_amunition.png" alt="Амуниция">
+            </a>
+            <a href="accessories.html" class="menu-item">
+                <img src="case_accessories.png" alt="Аксессуары">
+            </a>
+            <a href="#" class="menu-item">
+                <img src="case_soon.png" alt="Скоро">
+            </a>
+        </div>
+        <div id="coinDisplay">
+            <span id="coinCount">0</span>
+            <img src="coin.png" alt="Монета">
+        </div>
+    </div>
+    <script>
+        const coinCountDisplay = document.getElementById("coinCount");
+        let coins = parseInt(localStorage.getItem("coins")) || 0;
+
+        function updateCoinDisplay() {
+            coins = parseInt(localStorage.getItem("coins")) || 0;
+            coinCountDisplay.textContent = coins;
+        }
+
+        updateCoinDisplay();
+    </script>
+</body>
+</html>

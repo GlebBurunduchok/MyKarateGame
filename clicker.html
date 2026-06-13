@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кликер</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            padding-top: 60px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 100px; /* Увеличиваем отступ сверху, чтобы объекты были ниже */
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .click-image {
+            width: 200px; /* Увеличиваем размер кликера */
+            height: 200px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            margin-bottom: 30px; /* Увеличиваем отступ снизу */
+            align-self: center;
+        }
+
+        .click-image:hover {
+            transform: scale(1.1);
+        }
+
+        .click-image:active {
+            transform: scale(0.9);
+        }
+
+        #clickCount {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 30px; /* Увеличиваем отступ снизу */
+            text-align: center;
+        }
+
+        #backButton {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        #backButton:hover {
+            background-color: #367c39;
+        }
+
+        #coinDisplay {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        #coinDisplay img {
+            width: 40px;
+            margin-left: 10px;
+        }
+
+        #coinCount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" id="backButton">Назад</a>
+    <div class="container">
+        <h1>КЛИКЕР</h1>
+        <img src="coin.png" alt="Кликни сюда" class="click-image" id="clickImage">
+        <p id="clickCount">Нажми на картинку, чтобы получить монеты!</p>
+        <div id="coinDisplay">
+            <span id="coinCountDisplay">0</span>
+            <img src="coin.png" alt="Монета">
+        </div>
+    </div>
+    <script>
+        const clickImage = document.getElementById("clickImage");
+        const coinCountDisplay = document.getElementById("coinCountDisplay");
+        let coins = parseInt(localStorage.getItem("coins")) || 0;
+
+        clickImage.addEventListener("click", function() {
+            coins++;
+            localStorage.setItem("coins", coins);
+            coinCountDisplay.textContent = coins;
+        });
+
+        function updateCoinDisplay() {
+            coins = parseInt(localStorage.getItem("coins")) || 0;
+            coinCountDisplay.textContent = coins;
+        }
+
+        updateCoinDisplay();
+    </script>
+</body>
+</html>
+

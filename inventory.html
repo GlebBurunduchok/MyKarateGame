@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Инвентарь</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            padding-top: 60px;
+            padding-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+
+        .inventory-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        .inventory-item img {
+            width: 80px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .item-count {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 3px 6px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        #backButton {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        #backButton:hover {
+            background-color: #367c39;
+        }
+
+        .no-items-message {
+            text-align: center;
+            font-size: 18px;
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .sell-button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .sell-button:hover {
+            background-color: #d32f2f;
+        }
+
+        #coinDisplay {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 8px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #coinDisplay img {
+            width: 30px;
+            margin-left: 5px;
+        }
+
+        #coinCount {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" id="backButton">Назад</a>
+    <div class="container">
+        <h1>Ваш Инвентарь</h1>
+        <div class="inventory-grid" id="inventoryGrid">
+        </div>
+        <p id="noItemsMessage" class="no-items-message">В вашем инвентаре пока нет предметов.</p>
+        <div id="coinDisplay">  <span id="coinCount">500</span>
+            <img src="coin.png" alt="Монета">
+        </div>
+    </div>
+    <script>
+        const inventoryGrid = document.getElementById("inventoryGrid");
+        const noItemsMessage = document.getElementById("noItemsMessage");
+        const coinCountDisplay = document.getElementById("coinCount");
+
+        // Цены предметов
+        const itemPrices = {
+            'Перчатки': 300,
+            'Футы': 300,
+            'Кимоно': 500,
+            'Пояс': 100,
+            'Шлем': 100,
+            'Брелок': 25,
+            'Тапки': 50,
+            'Футболка': 50,
+            'Шапка': 50,
+            'Сумка': 100
+        };
+
+        // Получаем данные инвентаря и баланс монет из localStorage
+        let inventory = JSON.parse(localStorage.getItem("inventory")) || [];
+        let coins = parseInt(localStorage.getItem("coins")) || 500;
+
+        function displayInventory() {
+            if (inventory.length === 0) {
+                noItemsMessage.style.display = "block";
+                inventoryGrid.innerHTML = "";
+            } else {
+                noItemsMessage.style.display = "none";
+                inventoryGrid.innerHTML = "";
+
+                const groupedInventory = {};
+                inventory.forEach(item => {
+                    if (groupedInventory[item.name]) {
+                        groupedInventory[item.name].count++;
+                    } else {
+                        groupedInventory[item.name] = {
+                            ...item,
+                            count: 1
+                        };
+                    }
+                });
+
+                for (const itemName in groupedInventory) {
+                    const item = groupedInventory[itemName];
+                    const itemDiv = document.createElement("div");
+                    itemDiv.className = "inventory-item";
+                    itemDiv.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}">
+                        <p>${item.name} (${itemPrices[item.name]} монет)</p>
+                        ${item.count > 1 ? `<span class="item-count">x${item.count}</span>` : ''}
+                        <button class="sell-button" data-item-name="${item.name}">Продать</button>
+                    `;
+                    inventoryGrid.appendChild(itemDiv);
+                }
+
+                // Добавляем обработчики для кнопок "Продать"
+                const sellButtons = document.querySelectorAll('.sell-button');
+                sellButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const itemName = this.dataset.itemName;
+                        sellItem(itemName);
+                    });
+                });
+            }
+            updateCoinDisplay();
+        }
+
+        function sellItem(itemName) {
+            const itemPrice = itemPrices[itemName];
+            if (itemPrice === undefined) {
+                alert("Невозможно продать этот предмет.");
+                return;
+            }
+
+            // Удаляем проданный предмет из инвентаря
+            const itemIndex = inventory.findIndex(item => item.name === itemName);
+            if (itemIndex > -1) {
+                inventory.splice(itemIndex, 1);
+                localStorage.setItem("inventory", JSON.stringify(inventory));
+
+                // Добавляем монеты на баланс
+                coins += itemPrice;
+                localStorage.setItem("coins", coins);
+
+                displayInventory();
+            }
+            updateCoinDisplay();
+        }
+
+        function updateCoinDisplay() {
+            if (coinCountDisplay) {
+                coinCountDisplay.textContent = coins;
+            }
+        }
+
+        displayInventory();
+    </script>
+</body>
+</html>
