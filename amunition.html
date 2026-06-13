@@ -269,29 +269,37 @@
             const totalWidth = extendedRewardsLong.length * itemWidth;
 
             function animateSpin(time) {
-                if (!startTime) startTime = time;
-                const elapsed = time - startTime;
+    if (!startTime) startTime = time;
+    const elapsed = time - startTime;
 
-                if (elapsed >= spinDuration) {
-                    isSpinning = false;
-                    if (animationId) cancelAnimationFrame(animationId);
-                    animationId = null;
+    if (elapsed >= spinDuration) {
+        isSpinning = false;
+        if (animationId) cancelAnimationFrame(animationId);
+        animationId = null;
 
-                    const centerIndex = Math.round(Math.abs(currentPosition - centerPosition) / itemWidth) % extendedRewardsLong.length;
-                    const prize = extendedRewardsLong[centerIndex];
-                    rewardDisplay.innerHTML = `<img src="${prize.image}" style="width:100px"><p>${prize.name}</p>`;
-                    addItemToInventory(prize);
-                    updateCoinDisplay();
-                    return;
-                }
+        // ===== ГОЛОВНЕ ВИПРАВЛЕННЯ ДЛЯ ТЕЛЕФОНУ =====
+        // Читаємо РЕАЛЬНУ позицію рядка з екрана, а не зі змінної currentPosition
+        const actualLeft = parseFloat(rewardLine.style.left) || 0;
+        
+        // Розраховуємо індекс за реальною позицією
+        let centerIndex = Math.round((centerPosition - actualLeft) / itemWidth);
+        centerIndex = centerIndex % extendedRewardsLong.length;
+        if (centerIndex < 0) centerIndex += extendedRewardsLong.length;
+        
+        const prize = extendedRewardsLong[centerIndex];
+        rewardDisplay.innerHTML = `<img src="${prize.image}" style="width:100px"><p>${prize.name}</p>`;
+        addItemToInventory(prize);
+        updateCoinDisplay();
+        return;
+    }
 
-                const speed = 10 * (1 - elapsed / spinDuration);
-                currentPosition -= speed;
-                if (currentPosition <= -totalWidth / 2) currentPosition += totalWidth / 2;
-                rewardLine.style.left = currentPosition + "px";
+    const speed = 10 * (1 - elapsed / spinDuration);
+    currentPosition -= speed;
+    if (currentPosition <= -totalWidth / 2) currentPosition += totalWidth / 2;
+    rewardLine.style.left = currentPosition + "px";
 
-                animationId = requestAnimationFrame(animateSpin);
-            }
+    animationId = requestAnimationFrame(animateSpin);
+}
 
             animationId = requestAnimationFrame(animateSpin);
         }
