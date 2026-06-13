@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Інвентар</title>
     <style>
+        * {
+            touch-action: manipulation;
+        }
         body, html {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
         }
-
         .container {
             display: flex;
             flex-direction: column;
@@ -22,11 +24,9 @@
             padding-bottom: 20px;
             box-sizing: border-box;
         }
-
         h1 {
             margin-bottom: 20px;
         }
-
         .inventory-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -35,7 +35,6 @@
             max-width: 800px;
             margin-bottom: 20px;
         }
-
         .inventory-item {
             display: flex;
             flex-direction: column;
@@ -49,13 +48,11 @@
             text-align: center;
             position: relative;
         }
-
         .inventory-item img {
             width: 80px;
             height: auto;
             margin-bottom: 10px;
         }
-
         .item-count {
             position: absolute;
             bottom: 5px;
@@ -66,7 +63,6 @@
             border-radius: 10px;
             font-size: 12px;
         }
-
         #backButton {
             position: fixed;
             top: 20px;
@@ -79,19 +75,17 @@
             cursor: pointer;
             font-size: 16px;
             text-decoration: none;
+            z-index: 1000;
         }
-
         #backButton:hover {
             background-color: #367c39;
         }
-
         .no-items-message {
             text-align: center;
             font-size: 18px;
             color: #555;
             margin-top: 20px;
         }
-
         .sell-button {
             margin-top: 10px;
             padding: 8px 16px;
@@ -103,11 +97,9 @@
             font-size: 14px;
             transition: background-color 0.3s;
         }
-
         .sell-button:hover {
             background-color: #d32f2f;
         }
-
         #coinDisplay {
             position: fixed;
             top: 20px;
@@ -118,67 +110,54 @@
             padding: 8px 15px;
             border-radius: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
         }
-
         #coinDisplay img {
             width: 30px;
             margin-left: 5px;
         }
-
         #coinCount {
             font-size: 18px;
             font-weight: bold;
             color: #333;
         }
-
-        /* Мобільна адаптація */
-@media (max-width: 600px) {
-    .inventory-grid {
-        gap: 12px;
-        padding: 0 10px;
-    }
-    .inventory-item {
-        padding: 8px;
-    }
-    .inventory-item img {
-        width: 60px;
-    }
-    .sell-button {
-        padding: 6px 12px;
-        font-size: 12px;
-    }
-    h1 {
-        font-size: 20px;
-        margin-top: 10px;
-    }
-    #coinDisplay, #backButton {
-        top: 10px;
-    }
-    #backButton {
-        left: 10px;
-        padding: 8px 12px;
-        font-size: 14px;
-    }
-    #coinDisplay {
-        right: 10px;
-        padding: 5px 10px;
-    }
-    .container {
-        padding-top: 60px;
-    }
-    .no-items-message {
-        font-size: 16px;
-        padding: 0 20px;
-    }
-}
+        @media (max-width: 600px) {
+            .inventory-grid {
+                gap: 12px;
+                padding: 0 10px;
+            }
+            .inventory-item img {
+                width: 60px;
+            }
+            .sell-button {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            #backButton, #coinDisplay {
+                top: 10px;
+            }
+            #backButton {
+                left: 10px;
+                padding: 8px 12px;
+            }
+            #coinDisplay {
+                right: 10px;
+                padding: 5px 10px;
+            }
+            .container {
+                padding-top: 60px;
+            }
+        }
     </style>
 </head>
 <body>
     <a href="index.html" id="backButton">Назад</a>
     <div class="container">
         <h1>Ваш Інвентар</h1>
-        <div class="inventory-grid" id="inventoryGrid">
-        </div>
+        <div class="inventory-grid" id="inventoryGrid"></div>
         <p id="noItemsMessage" class="no-items-message">У вашому інвентарі поки немає предметів.</p>
         <div id="coinDisplay">
             <span id="coinCount">500</span>
@@ -190,7 +169,7 @@
         const noItemsMessage = document.getElementById("noItemsMessage");
         const coinCountDisplay = document.getElementById("coinCount");
 
-        // Ціни предметів
+        // НОВІ ЦІНИ ПРЕДМЕТІВ (підвищені)
         const itemPrices = {
             'Рукавиці': 500,
             'Наколінники': 500,
@@ -204,17 +183,18 @@
             'Сумка': 300
         };
 
-        // Отримуємо дані інвентарю та баланс монет з localStorage
-        let inventory = JSON.parse(localStorage.getItem("inventory")) || [];
+        // Функція для отримання монет (єдиний старт 500)
         function getCoins() {
-    let coins = parseInt(localStorage.getItem("coins"));
-    if (isNaN(coins)) {
-        coins = 500;
-        localStorage.setItem("coins", coins);
-    }
-    return coins;
-}
-let coins = getCoins();
+            let coins = parseInt(localStorage.getItem("coins"));
+            if (isNaN(coins)) {
+                coins = 500;
+                localStorage.setItem("coins", coins);
+            }
+            return coins;
+        }
+
+        let inventory = JSON.parse(localStorage.getItem("inventory")) || [];
+        let coins = getCoins();
 
         function displayInventory() {
             if (inventory.length === 0) {
@@ -240,16 +220,16 @@ let coins = getCoins();
                     const item = groupedInventory[itemName];
                     const itemDiv = document.createElement("div");
                     itemDiv.className = "inventory-item";
+                    const price = itemPrices[itemName] || 0;
                     itemDiv.innerHTML = `
                         <img src="${item.image}" alt="${item.name}">
-                        <p>${item.name} (${itemPrices[item.name]} монет)</p>
+                        <p>${item.name} (${price} монет)</p>
                         ${item.count > 1 ? `<span class="item-count">x${item.count}</span>` : ''}
                         <button class="sell-button" data-item-name="${item.name}">Продати</button>
                     `;
                     inventoryGrid.appendChild(itemDiv);
                 }
 
-                // Додаємо обробники для кнопок "Продати"
                 const sellButtons = document.querySelectorAll('.sell-button');
                 sellButtons.forEach(button => {
                     button.addEventListener('click', function() {
@@ -268,25 +248,20 @@ let coins = getCoins();
                 return;
             }
 
-            // Видаляємо проданий предмет з інвентарю
             const itemIndex = inventory.findIndex(item => item.name === itemName);
             if (itemIndex > -1) {
                 inventory.splice(itemIndex, 1);
                 localStorage.setItem("inventory", JSON.stringify(inventory));
 
-                // Додаємо монети на баланс
                 coins += itemPrice;
                 localStorage.setItem("coins", coins);
-
-                displayInventory();
+                updateCoinDisplay();
+                displayInventory(); // оновлюємо відображення
             }
-            updateCoinDisplay();
         }
 
         function updateCoinDisplay() {
-            if (coinCountDisplay) {
-                coinCountDisplay.textContent = coins;
-            }
+            coinCountDisplay.textContent = coins;
         }
 
         displayInventory();
