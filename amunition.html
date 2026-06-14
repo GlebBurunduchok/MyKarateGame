@@ -41,10 +41,6 @@
             transform: scale(0.95);
         }
 
-        .box-image {
-            width: 100px;
-        }
-
         .reward-container {
             width: 300px;
             height: 100px;
@@ -88,6 +84,8 @@
             width: 3px;
             height: 100%;
             background-color: red;
+            pointer-events: none;
+            z-index: 10;
         }
 
         #backButton {
@@ -191,7 +189,7 @@
         </div>
         <div class="reward-display" id="rewardDisplay"></div>
         <div id="coinDisplay">
-            <span id="coinCount">300</span>
+            <span id="coinCount">500</span>
             <img src="coin.png" alt="Монета">
         </div>
     </div>
@@ -207,9 +205,22 @@
         let isSpinning = false;
         let currentPosition = 0;
         let animationId = null;
-        const itemWidth = 100;
-        const rewardContainerWidth = 300;
-        const centerPosition = rewardContainerWidth / 2 - itemWidth / 2;
+
+        function getItemWidth() {
+            const firstItem = document.querySelector('.reward-item');
+            return firstItem ? firstItem.offsetWidth : 100;
+        }
+
+        function getContainerWidth() {
+            const container = document.getElementById('rewardContainer');
+            return container ? container.offsetWidth : 300;
+        }
+
+        function getCenterPosition() {
+            const containerWidth = getContainerWidth();
+            const itemW = getItemWidth();
+            return containerWidth / 2 - itemW / 2;
+        }
 
         function getCoins() {
             let coins = parseInt(localStorage.getItem("coins"));
@@ -260,46 +271,49 @@
             extendedRewardsLong.forEach(reward => {
                 const item = document.createElement("div");
                 item.className = "reward-item";
-                item.innerHTML = `<img src="${reward.image}" alt="${reward.name}">`;
+                const img = document.createElement("img");
+                img.src = reward.image;
+                img.alt = reward.name;
+                item.appendChild(img);
                 rewardLine.appendChild(item);
             });
 
             let startTime = null;
             const spinDuration = 3000;
-            const totalWidth = extendedRewardsLong.length * itemWidth;
+            let totalWidth = extendedRewardsLong.length * getItemWidth();
 
             function animateSpin(time) {
-    if (!startTime) startTime = time;
-    const elapsed = time - startTime;
+                if (!startTime) startTime = time;
+                const elapsed = time - startTime;
 
-    if (elapsed >= spinDuration) {
-        isSpinning = false;
-        if (animationId) cancelAnimationFrame(animationId);
-        animationId = null;
+                if (elapsed >= spinDuration) {
+                    isSpinning = false;
+                    if (animationId) cancelAnimationFrame(animationId);
+                    animationId = null;
 
-        // ===== ГОЛОВНЕ ВИПРАВЛЕННЯ ДЛЯ ТЕЛЕФОНУ =====
-        // Читаємо РЕАЛЬНУ позицію рядка з екрана, а не зі змінної currentPosition
-        const actualLeft = parseFloat(rewardLine.style.left) || 0;
-        
-        // Розраховуємо індекс за реальною позицією
-        let centerIndex = Math.round((centerPosition - actualLeft) / itemWidth);
-        centerIndex = centerIndex % extendedRewardsLong.length;
-        if (centerIndex < 0) centerIndex += extendedRewardsLong.length;
-        
-        const prize = extendedRewardsLong[centerIndex];
-        rewardDisplay.innerHTML = `<img src="${prize.image}" style="width:100px"><p>${prize.name}</p>`;
-        addItemToInventory(prize);
-        updateCoinDisplay();
-        return;
-    }
+                    const actualLeft = parseFloat(rewardLine.style.left) || 0;
+                    const currentItemWidth = getItemWidth();
+                    const currentCenterPos = getCenterPosition();
 
-    const speed = 10 * (1 - elapsed / spinDuration);
-    currentPosition -= speed;
-    if (currentPosition <= -totalWidth / 2) currentPosition += totalWidth / 2;
-    rewardLine.style.left = currentPosition + "px";
+                    let centerIndex = Math.round((currentCenterPos - actualLeft) / currentItemWidth);
+                    centerIndex = centerIndex % extendedRewardsLong.length;
+                    if (centerIndex < 0) centerIndex += extendedRewardsLong.length;
 
-    animationId = requestAnimationFrame(animateSpin);
-}
+                    const prize = extendedRewardsLong[centerIndex];
+                    rewardDisplay.innerHTML = `<img src="${prize.image}" style="width:100px"><p>${prize.name}</p>`;
+                    addItemToInventory(prize);
+                    updateCoinDisplay();
+                    return;
+                }
+
+                const speed = 10 * (1 - elapsed / spinDuration);
+                currentPosition -= speed;
+                totalWidth = extendedRewardsLong.length * getItemWidth();
+                if (currentPosition <= -totalWidth / 2) currentPosition += totalWidth / 2;
+                rewardLine.style.left = currentPosition + "px";
+
+                animationId = requestAnimationFrame(animateSpin);
+            }
 
             animationId = requestAnimationFrame(animateSpin);
         }

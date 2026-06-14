@@ -129,6 +129,7 @@
             color: #333;
         }
 
+        /* Мобільна адаптація - розміри зменшуються, але код підлаштується */
         @media (max-width: 600px) {
             .box {
                 width: 120px;
@@ -205,9 +206,23 @@
         let isSpinning = false;
         let currentPosition = 0;
         let animationId = null;
-        const itemWidth = 100;
-        const rewardContainerWidth = 300;
-        const centerPosition = rewardContainerWidth / 2 - itemWidth / 2;
+
+        // Функції для отримання реальних розмірів на екрані
+        function getItemWidth() {
+            const firstItem = document.querySelector('.reward-item');
+            return firstItem ? firstItem.offsetWidth : 100;
+        }
+
+        function getContainerWidth() {
+            const container = document.getElementById('rewardContainer');
+            return container ? container.offsetWidth : 300;
+        }
+
+        function getCenterPosition() {
+            const containerWidth = getContainerWidth();
+            const itemW = getItemWidth();
+            return containerWidth / 2 - itemW / 2;
+        }
 
         function getCoins() {
             let coins = parseInt(localStorage.getItem("coins"));
@@ -220,30 +235,6 @@
 
         let coins = getCoins();
         const casePrice = 75;
-
-        // Функція, яка визначає предмет під червоною смужкою
-        function getPrizeUnderHighlight() {
-            const container = document.getElementById("rewardContainer");
-            if (!container) return null;
-            const rect = container.getBoundingClientRect();
-            // Центр контейнера (де червона лінія)
-            const x = rect.left + rect.width / 2;
-            const y = rect.top + rect.height / 2;
-            
-            // Отримуємо всі елементи в цій точці
-            const elementsAtPoint = document.elementsFromPoint(x, y);
-            
-            // Шукаємо елемент з класом reward-item
-            for (let el of elementsAtPoint) {
-                if (el.classList && el.classList.contains("reward-item")) {
-                    const img = el.querySelector('img');
-                    if (img && img.alt) {
-                        return rewards.find(r => r.name === img.alt);
-                    }
-                }
-            }
-            return null;
-        }
 
         function openBox() {
             if (isSpinning) return;
@@ -291,7 +282,9 @@
 
             let startTime = null;
             const spinDuration = 3000;
-            const totalWidth = extendedRewardsLong.length * itemWidth;
+            
+            // Початкове визначення загальної ширини (динамічне)
+            let totalWidth = extendedRewardsLong.length * getItemWidth();
 
             function animateSpin(time) {
                 if (!startTime) startTime = time;
@@ -302,18 +295,16 @@
                     if (animationId) cancelAnimationFrame(animationId);
                     animationId = null;
 
-                    // Визначаємо приз за реальним положенням під смужкою
-                    let prize = getPrizeUnderHighlight();
-                    
-                    // Якщо з якоїсь причини не знайшлося — використовуємо резервний розрахунок
-                    if (!prize) {
-                        const actualLeft = parseFloat(rewardLine.style.left) || 0;
-                        let centerIndex = Math.round((centerPosition - actualLeft) / itemWidth);
-                        centerIndex = centerIndex % extendedRewardsLong.length;
-                        if (centerIndex < 0) centerIndex += extendedRewardsLong.length;
-                        prize = extendedRewardsLong[centerIndex];
-                    }
-                    
+                    // Отримуємо реальні розміри в момент зупинки
+                    const actualLeft = parseFloat(rewardLine.style.left) || 0;
+                    const currentItemWidth = getItemWidth();
+                    const currentCenterPos = getCenterPosition();
+
+                    let centerIndex = Math.round((currentCenterPos - actualLeft) / currentItemWidth);
+                    centerIndex = centerIndex % extendedRewardsLong.length;
+                    if (centerIndex < 0) centerIndex += extendedRewardsLong.length;
+
+                    const prize = extendedRewardsLong[centerIndex];
                     rewardDisplay.innerHTML = `<img src="${prize.image}" style="width:100px"><p>${prize.name}</p>`;
                     addItemToInventory(prize);
                     updateCoinDisplay();
@@ -322,6 +313,9 @@
 
                 const speed = 10 * (1 - elapsed / spinDuration);
                 currentPosition -= speed;
+                
+                // Оновлюємо загальну ширину (могла змінитись через ресайз)
+                totalWidth = extendedRewardsLong.length * getItemWidth();
                 if (currentPosition <= -totalWidth / 2) currentPosition += totalWidth / 2;
                 rewardLine.style.left = currentPosition + "px";
 
