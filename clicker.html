@@ -3,190 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Клікер</title>
+    <title>Клікер | MyKarateGame</title>
     <style>
         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
-            padding-top: 60px;
-            box-sizing: border-box;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            max-width: 500px;
             width: 100%;
-            padding: 20px;
-            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(4px);
+            border-radius: 70px;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
         }
 
         h1 {
-            font-size: 24px;
+            font-size: 2.2rem;
             margin-bottom: 20px;
-            color: #333;
-            text-align: center;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: titleGlow 2s infinite;
+        }
+
+        @keyframes titleGlow {
+            0%,100% { text-shadow: 0 0 5px rgba(240,147,251,0.3); }
+            50% { text-shadow: 0 0 20px rgba(240,147,251,0.6); }
         }
 
         .click-image {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
+            width: 220px;
             cursor: pointer;
-            transition: transform 0.2s ease;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.1s ease;
+            filter: drop-shadow(0 15px 20px rgba(0,0,0,0.3));
+            animation: floatCoin 3s infinite ease-in-out;
+        }
+
+        @keyframes floatCoin {
+            0%,100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
 
         .click-image:active {
-            transform: scale(0.95);
+            transform: scale(0.9);
+            animation: coinPop 0.2s ease-out;
+        }
+
+        @keyframes coinPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); filter: brightness(1.3); }
+            100% { transform: scale(0.9); }
         }
 
         #clickCount {
-            font-size: 20px;
-            color: #333;
-            margin-bottom: 30px;
-            text-align: center;
+            font-size: 1.3rem;
+            margin-top: 25px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            display: inline-block;
+            padding: 8px 25px;
+            border-radius: 40px;
+            color: white;
+            font-weight: bold;
         }
 
+        /* Кнопка назад */
         #backButton {
             position: fixed;
             top: 20px;
             left: 20px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
             color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
+            padding: 8px 18px;
+            border-radius: 40px;
             text-decoration: none;
-            z-index: 1000;
+            font-weight: bold;
+            transition: 0.2s;
+            z-index: 100;
         }
-
-        #backButton:hover {
-            background-color: #367c39;
-        }
+        #backButton:hover { transform: translateX(-5px); background: rgba(0,0,0,0.8); }
 
         #coinDisplay {
             position: fixed;
             top: 20px;
             right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 8px 18px;
+            border-radius: 40px;
+            color: gold;
+            font-weight: bold;
             display: flex;
             align-items: center;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 10px 20px;
-            border-radius: 30px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
+            gap: 8px;
+            z-index: 100;
+            font-size: 1.2rem;
         }
+        #coinDisplay img { width: 28px; filter: drop-shadow(0 0 2px gold); }
 
-        #coinDisplay img {
-            width: 30px;
-            margin-left: 8px;
-        }
-
-        #coinCountDisplay {
-            font-size: 22px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        /* Мобільна адаптація */
         @media (max-width: 600px) {
-            body {
-                padding-top: 70px;
-            }
-            .click-image {
-                width: 180px;
-                height: 180px;
-            }
-            h1 {
-                font-size: 22px;
-            }
-            #clickCount {
-                font-size: 16px;
-                margin: 0 15px 30px;
-            }
-            #backButton {
-                top: 10px;
-                left: 10px;
-                padding: 8px 12px;
-                font-size: 14px;
-            }
-            #coinDisplay {
-                top: 10px;
-                right: 10px;
-                padding: 5px 12px;
-            }
-            #coinCountDisplay {
-                font-size: 18px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            .click-image {
-                width: 150px;
-                height: 150px;
-            }
+            .click-image { width: 160px; }
+            h1 { font-size: 1.6rem; }
+            #clickCount { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
-    <a href="index.html" id="backButton">Назад</a>
-    <div class="container">
-        <h1>КЛІКЕР</h1>
-        <img src="coin.png" alt="Клацни сюди" class="click-image" id="clickImage">
-        <p id="clickCount">Натисни на картинку, щоб отримати монети!</p>
-        <div id="coinDisplay">
-            <span id="coinCountDisplay">0</span>
-            <img src="coin.png" alt="Монета">
-        </div>
+    <a href="index.html" id="backButton">← Назад</a>
+    <div id="coinDisplay">
+        <span id="coinCountDisplay">0</span>
+        <img src="coin.png" alt="🪙">
     </div>
+    <div class="container">
+        <h1>🪙 КЛІКЕР</h1>
+        <img src="coin.png" class="click-image" id="clickImage" alt="Клацни">
+        <div id="clickCount">Натискай на монету!</div>
+    </div>
+
     <script>
-        // Функція для отримання монет з єдиним стартовим значенням 500
         function getCoins() {
-            let coins = parseInt(localStorage.getItem("coins"));
-            if (isNaN(coins)) {
-                coins = 500;
-                localStorage.setItem("coins", coins);
-            }
-            return coins;
+            let c = parseInt(localStorage.getItem("coins"));
+            if (isNaN(c)) { c = 500; localStorage.setItem("coins", c); }
+            return c;
+        }
+        function setCoins(c) { localStorage.setItem("coins", c); }
+        function updateDisplay() {
+            document.getElementById("coinCountDisplay").innerText = getCoins();
         }
 
-        function setCoins(coins) {
-            localStorage.setItem("coins", coins);
-        }
-
-        function updateCoinDisplay() {
-            const coinDisplaySpan = document.getElementById("coinCountDisplay");
-            if (coinDisplaySpan) {
-                coinDisplaySpan.textContent = getCoins();
-            }
-        }
-
-        const clickImage = document.getElementById("clickImage");
-        clickImage.addEventListener("click", function() {
+        const img = document.getElementById("clickImage");
+        img.addEventListener("click", (e) => {
             let coins = getCoins();
             coins++;
             setCoins(coins);
-            updateCoinDisplay();
+            updateDisplay();
+
+            // Ефект вильоту монетки
+            const flyer = document.createElement("div");
+            flyer.innerText = "🪙";
+            flyer.style.position = "fixed";
+            flyer.style.left = e.clientX + "px";
+            flyer.style.top = e.clientY + "px";
+            flyer.style.fontSize = "40px";
+            flyer.style.pointerEvents = "none";
+            flyer.style.zIndex = "9999";
+            flyer.style.transition = "all 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1)";
+            flyer.style.filter = "drop-shadow(0 0 5px gold)";
+            document.body.appendChild(flyer);
+            setTimeout(() => {
+                flyer.style.transform = "translateY(-180px) rotate(720deg)";
+                flyer.style.opacity = "0";
+            }, 10);
+            setTimeout(() => flyer.remove(), 800);
+
+            // Вібрація на телефоні
+            if (navigator.vibrate) navigator.vibrate(50);
         });
 
-        updateCoinDisplay();
+        updateDisplay();
     </script>
 </body>
 </html>
