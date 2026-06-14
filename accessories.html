@@ -3,184 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>КЕЙС "ACCESSORIES" - 75 монет</title>
+    <title>Кейс Аксесуари | MyKarateGame</title>
     <style>
-        body, html {
+        * {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            box-sizing: border-box;
+            touch-action: manipulation;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+            max-width: 550px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(4px);
+            border-radius: 50px;
+            padding: 25px 20px 35px;
+            text-align: center;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
         }
 
+        h1 {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        /* Кейс */
         .box {
             width: 150px;
             height: 150px;
-            background-color: #d4af37;
-            border-radius: 10px;
+            background: radial-gradient(circle at 30% 20%, #ffd966, #b8860b);
+            border-radius: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: transform 0.3s;
-            margin-bottom: 20px;
+            margin: 0 auto 20px;
+            transition: all 0.2s ease;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
         }
-
-        .box:hover {
-            transform: scale(1.1);
-        }
-
         .box:active {
-            transform: scale(0.95);
+            animation: shake 0.3s ease-in-out;
         }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px) rotate(-2deg); }
+            75% { transform: translateX(6px) rotate(2deg); }
+        }
+        .box img { width: 100px; }
 
+        /* Контейнер прокрутки */
         .reward-container {
             width: 300px;
             height: 100px;
             overflow: hidden;
-            border: 2px solid #333;
+            border-radius: 25px;
+            border: 2px solid rgba(255, 215, 0, 0.6);
             position: relative;
-            margin-bottom: 20px;
-            background-color: white;
+            margin: 15px auto;
+            background: rgba(0, 0, 0, 0.2);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
         }
-
         .reward-line {
             display: flex;
             position: absolute;
             top: 0;
             left: 0;
         }
-
         .reward-item {
             width: 100px;
             height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+            margin: 0 2px;
+            border-radius: 18px;
+            transition: all 0.1s;
         }
-
         .reward-item img {
-            width: 80px;
+            width: 70px;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
         }
-
-        .reward-display {
-            font-size: 24px;
-            color: #333;
-            text-align: center;
-        }
-
         .highlight {
             position: absolute;
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 3px;
+            width: 4px;
             height: 100%;
-            background-color: red;
+            background: red;
+            box-shadow: 0 0 15px red;
             pointer-events: none;
             z-index: 10;
+            animation: glowPulse 1s infinite;
+        }
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 5px red; opacity: 1; }
+            50% { box-shadow: 0 0 20px red; opacity: 0.9; }
         }
 
+        /* Результат */
+        .reward-display {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 60px;
+            padding: 12px 20px;
+            margin-top: 20px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            80% { transform: scale(1.02); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .reward-display img {
+            width: 80px;
+            border-radius: 20px;
+            margin-bottom: 5px;
+        }
+        .reward-display p {
+            font-size: 1.2rem;
+            margin: 5px 0 0;
+        }
+
+        /* Кнопки навігації */
         #backButton {
-            position: absolute;
+            position: fixed;
             top: 20px;
             left: 20px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
             color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
+            padding: 8px 18px;
+            border-radius: 40px;
             text-decoration: none;
+            font-weight: bold;
+            transition: 0.2s;
+            z-index: 100;
+            font-size: 1rem;
         }
-
-        #backButton:hover {
-            background-color: #367c39;
-        }
+        #backButton:hover { transform: translateX(-5px); background: rgba(0,0,0,0.8); }
 
         #coinDisplay {
-            position: absolute;
+            position: fixed;
             top: 20px;
             right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 8px 18px;
+            border-radius: 40px;
+            color: gold;
+            font-weight: bold;
             display: flex;
             align-items: center;
-            background-color: rgba(255, 255, 255, 0.7);
-            padding: 8px 15px;
-            border-radius: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            gap: 8px;
+            z-index: 100;
+            font-size: 1.2rem;
         }
+        #coinDisplay img { width: 28px; filter: drop-shadow(0 0 2px gold); }
 
-        #coinDisplay img {
-            width: 30px;
-            margin-left: 5px;
-        }
-
-        #coinCount {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        /* Мобільна адаптація - розміри зменшуються, але код підлаштується */
+        /* Мобільна адаптація */
         @media (max-width: 600px) {
-            .box {
-                width: 120px;
-                height: 120px;
-            }
-            .box img {
-                width: 80px;
-            }
-            .reward-container {
-                width: 90%;
-                max-width: 300px;
-            }
-            .reward-item {
-                width: 80px;
-            }
-            .reward-item img {
-                width: 60px;
-            }
-            h1 {
-                font-size: 18px;
-                text-align: center;
-                margin: 10px;
-            }
-            #coinDisplay, #backButton {
-                top: 10px;
-            }
-            #backButton {
-                left: 10px;
-                padding: 8px 12px;
-                font-size: 14px;
-            }
-            #coinDisplay {
-                right: 10px;
-                padding: 5px 10px;
-            }
-            .reward-display {
-                font-size: 18px;
-            }
-            .container {
-                justify-content: flex-start;
-                padding-top: 70px;
-                height: auto;
-                min-height: 100vh;
-            }
+            .container { padding: 20px 15px 30px; }
+            h1 { font-size: 1.3rem; }
+            .box { width: 120px; height: 120px; }
+            .box img { width: 80px; }
+            .reward-container { width: 90%; max-width: 280px; height: 90px; }
+            .reward-item { width: 80px; height: 90px; }
+            .reward-item img { width: 55px; }
+            .reward-display img { width: 65px; }
+            .reward-display p { font-size: 1rem; }
+            #backButton, #coinDisplay { top: 12px; padding: 5px 14px; font-size: 0.9rem; }
         }
     </style>
 </head>
 <body>
-    <a href="cases.html" id="backButton">Назад</a>
+    <a href="cases.html" id="backButton">← Назад</a>
+    <div id="coinDisplay">
+        <span id="coinCount">500</span>
+        <img src="coin.png" alt="🪙">
+    </div>
     <div class="container">
-        <h1>КЕЙС "ACCESSORIES" - 75 монет</h1>
+        <h1>🧰 КЕЙС "ACCESSORIES"<br> 75 🪙</h1>
         <div class="box" onclick="openBox()">
             <img src="case_accessories.png" alt="Кейс">
         </div>
@@ -188,61 +219,54 @@
             <div class="reward-line" id="rewardLine"></div>
             <div class="highlight"></div>
         </div>
-        <div class="reward-display" id="rewardDisplay"></div>
-        <div id="coinDisplay">
-            <span id="coinCount">500</span>
-            <img src="coin.png" alt="Монета">
-        </div>
+        <div class="reward-display" id="rewardDisplay">Натисни на кейс!</div>
     </div>
+
     <script>
         const rewards = [
-            { name: 'Брелок', image: 'keychain.png', chance: 0.30, price: 25 },
-            { name: 'Капці', image: 'slippers.png', chance: 0.19, price: 50 },
-            { name: 'Футболка', image: 'shirt.png', chance: 0.19, price: 50 },
-            { name: 'Шапка', image: 'hat.png', chance: 0.19, price: 50 },
-            { name: 'Сумка', image: 'bag.png', chance: 0.13, price: 100 }
+            { name: 'Брелок', image: 'keychain.png', chance: 0.30, price: 75 },
+            { name: 'Капці', image: 'slippers.png', chance: 0.19, price: 100 },
+            { name: 'Футболка', image: 'shirt.png', chance: 0.19, price: 150 },
+            { name: 'Шапка', image: 'hat.png', chance: 0.19, price: 100 },
+            { name: 'Сумка', image: 'bag.png', chance: 0.13, price: 300 }
         ];
 
-        let isSpinning = false;
-        let currentPosition = 0;
-        let animationId = null;
+        let isSpinning = false, currentPosition = 0, animationId = null;
 
-        // Функції для отримання реальних розмірів на екрані
         function getItemWidth() {
-            const firstItem = document.querySelector('.reward-item');
-            return firstItem ? firstItem.offsetWidth : 100;
+            const first = document.querySelector('.reward-item');
+            return first ? first.offsetWidth : 100;
         }
-
         function getContainerWidth() {
-            const container = document.getElementById('rewardContainer');
-            return container ? container.offsetWidth : 300;
+            const c = document.getElementById('rewardContainer');
+            return c ? c.offsetWidth : 300;
         }
-
         function getCenterPosition() {
-            const containerWidth = getContainerWidth();
-            const itemW = getItemWidth();
-            return containerWidth / 2 - itemW / 2;
+            return getContainerWidth()/2 - getItemWidth()/2;
         }
-
         function getCoins() {
-            let coins = parseInt(localStorage.getItem("coins"));
-            if (isNaN(coins)) {
-                coins = 500;
-                localStorage.setItem("coins", coins);
-            }
-            return coins;
+            let c = parseInt(localStorage.getItem("coins"));
+            if (isNaN(c)) { c = 500; localStorage.setItem("coins", c); }
+            return c;
         }
-
         let coins = getCoins();
         const casePrice = 75;
+
+        function updateCoinDisplay() {
+            document.getElementById("coinCount").innerText = coins;
+        }
+        function addItemToInventory(item) {
+            let inv = JSON.parse(localStorage.getItem("inventory")) || [];
+            inv.push(item);
+            localStorage.setItem("inventory", JSON.stringify(inv));
+        }
 
         function openBox() {
             if (isSpinning) return;
             if (coins < casePrice) {
-                alert("Недостатньо монет для відкриття кейсу!");
+                alert("Недостатньо монет!");
                 return;
             }
-
             coins -= casePrice;
             localStorage.setItem("coins", coins);
             updateCoinDisplay();
@@ -253,89 +277,63 @@
             const rewardLine = document.getElementById("rewardLine");
             const rewardDisplay = document.getElementById("rewardDisplay");
             rewardLine.innerHTML = "";
-            rewardDisplay.innerHTML = "Кейс відкривається...";
+            rewardDisplay.innerHTML = "🎰 Крутимо...";
 
-            let extendedRewards = [];
-            rewards.forEach(reward => {
-                const count = Math.round(reward.chance * 100);
-                for (let i = 0; i < count; i++) {
-                    extendedRewards.push(reward);
-                }
+            let extended = [];
+            rewards.forEach(r => {
+                let cnt = Math.round(r.chance * 100);
+                for (let i=0; i<cnt; i++) extended.push(r);
             });
-            
-            for (let i = extendedRewards.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [extendedRewards[i], extendedRewards[j]] = [extendedRewards[j], extendedRewards[i]];
+            for (let i=extended.length-1; i>0; i--) {
+                let j = Math.floor(Math.random()*(i+1));
+                [extended[i], extended[j]] = [extended[j], extended[i]];
             }
+            const longArr = [...extended, ...extended, ...extended];
 
-            const extendedRewardsLong = [...extendedRewards, ...extendedRewards, ...extendedRewards];
-
-            extendedRewardsLong.forEach(reward => {
-                const item = document.createElement("div");
-                item.className = "reward-item";
-                const img = document.createElement("img");
-                img.src = reward.image;
-                img.alt = reward.name;
-                item.appendChild(img);
-                rewardLine.appendChild(item);
+            longArr.forEach(r => {
+                let div = document.createElement("div");
+                div.className = "reward-item";
+                let img = document.createElement("img");
+                img.src = r.image;
+                img.alt = r.name;
+                div.appendChild(img);
+                rewardLine.appendChild(div);
             });
 
             let startTime = null;
             const spinDuration = 3000;
-            
-            // Початкове визначення загальної ширини (динамічне)
-            let totalWidth = extendedRewardsLong.length * getItemWidth();
+            let totalWidth = longArr.length * getItemWidth();
 
             function animateSpin(time) {
                 if (!startTime) startTime = time;
-                const elapsed = time - startTime;
-
+                let elapsed = time - startTime;
                 if (elapsed >= spinDuration) {
                     isSpinning = false;
                     if (animationId) cancelAnimationFrame(animationId);
                     animationId = null;
 
-                    // Отримуємо реальні розміри в момент зупинки
                     const actualLeft = parseFloat(rewardLine.style.left) || 0;
-                    const currentItemWidth = getItemWidth();
-                    const currentCenterPos = getCenterPosition();
+                    const w = getItemWidth();
+                    const center = getCenterPosition();
+                    let idx = Math.round((center - actualLeft) / w);
+                    idx = idx % longArr.length;
+                    if (idx < 0) idx += longArr.length;
+                    const prize = longArr[idx];
 
-                    let centerIndex = Math.round((currentCenterPos - actualLeft) / currentItemWidth);
-                    centerIndex = centerIndex % extendedRewardsLong.length;
-                    if (centerIndex < 0) centerIndex += extendedRewardsLong.length;
-
-                    const prize = extendedRewardsLong[centerIndex];
-                    rewardDisplay.innerHTML = `<img src="${prize.image}" style="width:100px"><p>${prize.name}</p>`;
+                    rewardDisplay.innerHTML = `<img src="${prize.image}"><p>✨ ${prize.name} ✨</p>`;
                     addItemToInventory(prize);
                     updateCoinDisplay();
+                    if (navigator.vibrate) navigator.vibrate(100);
                     return;
                 }
-
-                const speed = 10 * (1 - elapsed / spinDuration);
+                let speed = 10 * (1 - elapsed / spinDuration);
                 currentPosition -= speed;
-                
-                // Оновлюємо загальну ширину (могла змінитись через ресайз)
-                totalWidth = extendedRewardsLong.length * getItemWidth();
-                if (currentPosition <= -totalWidth / 2) currentPosition += totalWidth / 2;
+                totalWidth = longArr.length * getItemWidth();
+                if (currentPosition <= -totalWidth/2) currentPosition += totalWidth/2;
                 rewardLine.style.left = currentPosition + "px";
-
                 animationId = requestAnimationFrame(animateSpin);
             }
-
             animationId = requestAnimationFrame(animateSpin);
-        }
-
-        function addItemToInventory(item) {
-            let inventory = JSON.parse(localStorage.getItem("inventory")) || [];
-            inventory.push(item);
-            localStorage.setItem("inventory", JSON.stringify(inventory));
-        }
-
-        function updateCoinDisplay() {
-            const coinDisplay = document.getElementById("coinCount");
-            if (coinDisplay) {
-                coinDisplay.textContent = coins;
-            }
         }
 
         updateCoinDisplay();
