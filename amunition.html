@@ -5,31 +5,195 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Кейс Амуніція | MyKarateGame</title>
     <style>
-        /* ТОЧНО ТАКІ Ж СТИЛІ, ЯК У ACCESSORIES.HTML (скопіюйте їх повністю) */
-        * { margin: 0; padding: 0; box-sizing: border-box; touch-action: manipulation; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .container { max-width: 550px; width: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(4px); border-radius: 50px; padding: 25px 20px 35px; text-align: center; box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2); }
-        h1 { font-size: 1.6rem; margin-bottom: 20px; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; background-clip: text; color: transparent; display: inline-block; }
-        .box { width: 150px; height: 150px; background: radial-gradient(circle at 30% 20%, #ffd966, #b8860b); border-radius: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; margin: 0 auto 20px; transition: all 0.2s ease; box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3); }
-        .box:active { animation: shake 0.3s ease-in-out; }
-        @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px) rotate(-2deg); } 75% { transform: translateX(6px) rotate(2deg); } }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            touch-action: manipulation;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .container {
+            max-width: 550px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(4px);
+            border-radius: 50px;
+            padding: 25px 20px 35px;
+            text-align: center;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .box {
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle at 30% 20%, #ffd966, #b8860b);
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin: 0 auto 20px;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+        }
+        .box:active {
+            animation: shake 0.3s ease-in-out;
+        }
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            25% { transform: translateX(-6px) rotate(-2deg); }
+            75% { transform: translateX(6px) rotate(2deg); }
+        }
         .box img { width: 100px; }
-        .reward-container { width: 300px; height: 100px; overflow: hidden; border-radius: 25px; border: 2px solid rgba(255, 215, 0, 0.6); position: relative; margin: 15px auto; background: rgba(0, 0, 0, 0.2); box-shadow: inset 0 0 10px rgba(0,0,0,0.1); }
-        .reward-line { display: flex; position: absolute; top: 0; left: 0; }
-        .reward-item { width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.2); backdrop-filter: blur(4px); margin: 0 2px; border-radius: 18px; }
-        .reward-item img { width: 70px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3)); }
-        .highlight { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 4px; height: 100%; background: red; box-shadow: 0 0 15px red; pointer-events: none; z-index: 10; animation: glowPulse 1s infinite; }
-        @keyframes glowPulse { 0%,100% { box-shadow: 0 0 5px red; } 50% { box-shadow: 0 0 20px red; } }
-        .reward-display { background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); border-radius: 60px; padding: 12px 20px; margin-top: 20px; text-align: center; color: white; font-weight: bold; animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
-        @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 80% { transform: scale(1.02); } 100% { transform: scale(1); opacity: 1; } }
-        .reward-display img { width: 80px; border-radius: 20px; margin-bottom: 5px; }
-        .reward-display p { font-size: 1.2rem; margin: 5px 0 0; }
-        #backButton { position: fixed; top: 20px; left: 20px; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px); color: white; padding: 8px 18px; border-radius: 40px; text-decoration: none; font-weight: bold; transition: 0.2s; z-index: 100; font-size: 1rem; }
-        #backButton:hover { transform: translateX(-5px); background: rgba(0,0,0,0.8); }
-        #coinDisplay { position: fixed; top: 20px; right: 20px; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px); padding: 8px 18px; border-radius: 40px; color: gold; font-weight: bold; display: flex; align-items: center; gap: 8px; z-index: 100; font-size: 1.2rem; }
+
+        .reward-container {
+            width: 300px;
+            height: 100px;
+            overflow: hidden;
+            border-radius: 25px;
+            border: 2px solid rgba(255, 215, 0, 0.6);
+            position: relative;
+            margin: 15px auto;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        .reward-line {
+            display: flex;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .reward-item {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            margin: 0 2px;
+            border-radius: 18px;
+        }
+        .reward-item img {
+            width: 70px;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+        }
+        .highlight {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: red;
+            box-shadow: 0 0 15px red;
+            pointer-events: none;
+            z-index: 10;
+            animation: glowPulse 1s infinite;
+        }
+        @keyframes glowPulse {
+            0%,100% { box-shadow: 0 0 5px red; opacity: 1; }
+            50% { box-shadow: 0 0 20px red; opacity: 0.9; }
+        }
+
+        .reward-display {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 60px;
+            padding: 12px 20px;
+            margin-top: 20px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            80% { transform: scale(1.02); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .reward-display img {
+            width: 80px;
+            border-radius: 20px;
+            margin-bottom: 5px;
+        }
+        .reward-display p {
+            font-size: 1.2rem;
+            margin: 5px 0 0;
+        }
+
+        #backButton {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.2s;
+            z-index: 100;
+            font-size: 1rem;
+        }
+        #backButton:hover { transform: translateX(-5px); background: rgba(0, 0, 0, 0.8); }
+
+        #coinDisplay {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 8px 18px;
+            border-radius: 40px;
+            color: gold;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 100;
+            font-size: 1.2rem;
+        }
         #coinDisplay img { width: 28px; filter: drop-shadow(0 0 2px gold); }
-        @media (max-width: 600px) { .container { padding: 20px 15px 30px; } h1 { font-size: 1.3rem; } .box { width: 120px; height: 120px; } .box img { width: 80px; } .reward-container { width: 90%; max-width: 280px; height: 90px; } .reward-item { width: 80px; height: 90px; } .reward-item img { width: 55px; } .reward-display img { width: 65px; } .reward-display p { font-size: 1rem; } #backButton, #coinDisplay { top: 12px; padding: 5px 14px; font-size: 0.9rem; } }
+
+        @media (max-width: 600px) {
+            .container { padding: 20px 15px 30px; }
+            h1 { font-size: 1.3rem; }
+            .box { width: 120px; height: 120px; }
+            .box img { width: 80px; }
+            .reward-container { width: 90%; max-width: 280px; height: 90px; }
+            .reward-item { width: 80px; height: 90px; }
+            .reward-item img { width: 55px; }
+            .reward-display img { width: 65px; }
+            .reward-display p { font-size: 1rem; }
+            #backButton, #coinDisplay { top: 12px; padding: 5px 14px; font-size: 0.9rem; }
+        }
     </style>
 </head>
 <body>
@@ -39,7 +203,7 @@
         <img src="coin.png" alt="🪙">
     </div>
     <div class="container">
-        <h1>⚔️ КЕЙС "АМУНІЦІЯ"<br> 300 🪙</h1>
+        <h1>⚔️ КЕЙС "АМУНІЦІЯ"<br>300 🪙</h1>
         <div class="box" onclick="openBox()">
             <img src="case_amunition.png" alt="Кейс">
         </div>
@@ -53,13 +217,15 @@
     <script>
         const rewards = [
             { name: 'Рукавиці', image: 'gloves.png', chance: 0.175, price: 300 },
-            { name: 'Наколінники', image: 'foot_protection.png', chance: 0.175, price: 300 },
+            { name: 'Фути', image: 'foot_protection.png', chance: 0.175, price: 300 },
             { name: 'Кімоно', image: 'kimono.png', chance: 0.05, price: 500 },
             { name: 'Пояс', image: 'belt.png', chance: 0.3, price: 100 },
             { name: 'Шолом', image: 'helmet.png', chance: 0.3, price: 100 }
         ];
 
-        let isSpinning = false, currentPosition = 0, animationId = null;
+        let isSpinning = false;
+        let currentPosition = 0;
+        let animationId = null;
 
         function getItemWidth() {
             const first = document.querySelector('.reward-item');
@@ -70,8 +236,9 @@
             return c ? c.offsetWidth : 300;
         }
         function getCenterPosition() {
-            return getContainerWidth()/2 - getItemWidth()/2;
+            return getContainerWidth() / 2 - getItemWidth() / 2;
         }
+
         function getCoins() {
             let c = parseInt(localStorage.getItem("coins"));
             if (isNaN(c)) { c = 500; localStorage.setItem("coins", c); }
@@ -95,6 +262,7 @@
                 alert("Недостатньо монет!");
                 return;
             }
+
             coins -= casePrice;
             localStorage.setItem("coins", coins);
             updateCoinDisplay();
@@ -110,10 +278,10 @@
             let extended = [];
             rewards.forEach(r => {
                 let cnt = Math.round(r.chance * 100);
-                for (let i=0; i<cnt; i++) extended.push(r);
+                for (let i = 0; i < cnt; i++) extended.push(r);
             });
-            for (let i=extended.length-1; i>0; i--) {
-                let j = Math.floor(Math.random()*(i+1));
+            for (let i = extended.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
                 [extended[i], extended[j]] = [extended[j], extended[i]];
             }
             const longArr = [...extended, ...extended, ...extended];
@@ -134,33 +302,62 @@
 
             function animateSpin(time) {
                 if (!startTime) startTime = time;
-                let elapsed = time - startTime;
+                const elapsed = time - startTime;
+
                 if (elapsed >= spinDuration) {
                     isSpinning = false;
                     if (animationId) cancelAnimationFrame(animationId);
                     animationId = null;
 
-                    const actualLeft = parseFloat(rewardLine.style.left) || 0;
-                    const w = getItemWidth();
-                    const center = getCenterPosition();
-                    let idx = Math.round((center - actualLeft) / w);
-                    idx = idx % longArr.length;
-                    if (idx < 0) idx += longArr.length;
-                    const prize = longArr[idx];
+                    // ---- МЕТОД 1: визначаємо предмет під червоною смужкою ----
+                    const container = document.getElementById("rewardContainer");
+                    const rect = container.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
 
-                    rewardDisplay.innerHTML = `<img src="${prize.image}"><p>✨ ${prize.name} ✨</p>`;
-                    addItemToInventory(prize);
+                    let prize = null;
+                    const elementsAtPoint = document.elementsFromPoint(centerX, centerY);
+                    for (let el of elementsAtPoint) {
+                        if (el.classList && el.classList.contains("reward-item")) {
+                            const img = el.querySelector('img');
+                            if (img && img.alt) {
+                                prize = longArr.find(r => r.name === img.alt);
+                                break;
+                            }
+                        }
+                    }
+
+                    // ---- МЕТОД 2 (резервний) - розрахунок за позицією ----
+                    if (!prize) {
+                        const actualLeft = parseFloat(rewardLine.style.left) || 0;
+                        const w = getItemWidth();
+                        const center = getCenterPosition();
+                        let idx = Math.round((center - actualLeft) / w);
+                        idx = idx % longArr.length;
+                        if (idx < 0) idx += longArr.length;
+                        prize = longArr[idx];
+                    }
+
+                    if (prize) {
+                        rewardDisplay.innerHTML = `<img src="${prize.image}"><p>✨ ${prize.name} ✨</p>`;
+                        addItemToInventory(prize);
+                    } else {
+                        rewardDisplay.innerHTML = `<p>❌ Помилка! Спробуй ще раз</p>`;
+                    }
                     updateCoinDisplay();
                     if (navigator.vibrate) navigator.vibrate(100);
                     return;
                 }
-                let speed = 10 * (1 - elapsed / spinDuration);
+
+                const speed = 10 * (1 - elapsed / spinDuration);
                 currentPosition -= speed;
                 totalWidth = longArr.length * getItemWidth();
-                if (currentPosition <= -totalWidth/2) currentPosition += totalWidth/2;
+                if (currentPosition <= -totalWidth / 2) currentPosition += totalWidth / 2;
                 rewardLine.style.left = currentPosition + "px";
+
                 animationId = requestAnimationFrame(animateSpin);
             }
+
             animationId = requestAnimationFrame(animateSpin);
         }
 
