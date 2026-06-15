@@ -5,148 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>MyKarateGame - Кейси</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            touch-action: manipulation;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            animation: fadeInPage 0.8s ease-out;
-        }
-
-        @keyframes fadeInPage {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .container {
-            max-width: 800px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 30px 20px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 50px;
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(2px);
-            text-align: center;
-            transition: transform 0.3s;
-        }
-
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 30px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: titlePulse 2s infinite;
-        }
-
-        @keyframes titlePulse {
-            0%, 100% {
-                text-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
-                transform: scale(1);
-            }
-            50% {
-                text-shadow: 0 0 20px rgba(102, 126, 234, 0.6);
-                transform: scale(1.02);
-            }
-        }
-
-        .menu {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 25px;
-        }
-
-        .menu-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: slideUp 0.5s forwards;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; touch-action: manipulation; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeInPage 0.8s ease-out; }
+        @keyframes fadeInPage { from { opacity: 0; } to { opacity: 1; } }
+        .container { max-width: 800px; width: 100%; margin: 0 auto; padding: 30px 20px; background: rgba(255, 255, 255, 0.95); border-radius: 50px; box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2); backdrop-filter: blur(2px); text-align: center; }
+        h1 { font-size: 2rem; margin-bottom: 30px; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; background-clip: text; color: transparent; animation: titlePulse 2s infinite; }
+        @keyframes titlePulse { 0%,100% { text-shadow: 0 0 5px rgba(102,126,234,0.3); transform: scale(1); } 50% { text-shadow: 0 0 20px rgba(102,126,234,0.6); transform: scale(1.02); } }
+        .menu { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 25px; }
+        .menu-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; cursor: pointer; opacity: 0; transform: translateY(30px); animation: slideUp 0.5s forwards; }
         .menu-item:nth-child(1) { animation-delay: 0.1s; }
         .menu-item:nth-child(2) { animation-delay: 0.3s; }
         .menu-item:nth-child(3) { animation-delay: 0.5s; }
-
-        @keyframes slideUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .menu-item img {
-            width: 150px;
-            height: 150px;
-            border-radius: 30px;
-            object-fit: cover;
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .menu-item img:hover {
-            transform: translateY(-10px) scale(1.05);
-            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .menu-item img:active {
-            transform: scale(0.95);
-            transition: transform 0.05s;
-        }
-
-        /* Мобільна адаптація */
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px 15px;
-                border-radius: 35px;
-            }
-            h1 {
-                font-size: 1.5rem;
-                margin-bottom: 20px;
-            }
-            .menu-item img {
-                width: 110px;
-                height: 110px;
-                border-radius: 20px;
-            }
-            .menu {
-                gap: 15px;
-            }
-        }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+        .menu-item img { width: 150px; height: 150px; border-radius: 30px; object-fit: cover; transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .menu-item img:hover { transform: translateY(-10px) scale(1.05); box-shadow: 0 20px 30px rgba(0,0,0,0.3); }
+        .menu-item img:active { transform: scale(0.95); transition: transform 0.05s; }
+        @media (max-width: 600px) { .container { padding: 20px 15px; border-radius: 35px; } h1 { font-size: 1.5rem; } .menu-item img { width: 110px; height: 110px; border-radius: 20px; } .menu { gap: 15px; } }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🥋 СИМУЛЯТОР КЕЙСІВ</h1>
         <div class="menu">
-            <a href="cases.html" class="menu-item">
-                <img src="box.png" alt="Відкривати кейси">
-            </a>
-            <a href="inventory.html" class="menu-item">
-                <img src="inventory_image.jpg" alt="Інвентар">
-            </a>
-            <a href="clicker.html" class="menu-item">
-                <img src="coin_clicker.png" alt="Клікер">
-            </a>
+            <a href="cases.html" class="menu-item"><img src="box.png" alt="Відкривати кейси"></a>
+            <a href="inventory.html" class="menu-item"><img src="inventory_image.jpg" alt="Інвентар"></a>
+            <a href="clicker.html" class="menu-item"><img src="coin_clicker.png" alt="Клікер"></a>
         </div>
     </div>
+    <script>
+        // Ініціалізація монет, якщо немає
+        if (localStorage.getItem("coins") === null) localStorage.setItem("coins", "500");
+        if (localStorage.getItem("inventory") === null) localStorage.setItem("inventory", "[]");
+    </script>
 </body>
 </html>

@@ -143,7 +143,6 @@
             backdrop-filter: blur(5px);
         }
 
-        /* Кнопки навігації */
         #backButton {
             position: fixed;
             top: 20px;
@@ -202,9 +201,9 @@
 
     <script>
         const itemPrices = {
-            'Рукавиці': 600, 'Наколінники': 600, 'Кімоно': 1000,
-            'Пояс': 250, 'Шолом': 250, 'Брелок': 60, 'Капці': 120,
-            'Футболка': 120, 'Шапка': 120, 'Сумка': 220
+            'Рукавиці': 500, 'Фути': 500, 'Кімоно': 1000,
+            'Пояс': 300, 'Шолом': 300, 'Брелок': 75, 'Капці': 100,
+            'Футболка': 150, 'Шапка': 100, 'Сумка': 300
         };
 
         function getCoins() {
@@ -244,15 +243,20 @@
                     <p>${item.name}</p>
                     <p>💰 ${price}</p>
                     ${item.count > 1 ? `<div class="item-count">x${item.count}</div>` : ''}
-                    <button class="sell-button" data-name="${item.name}">Продати</button>
+                    <button class="sell-button" data-name="${item.name}" data-price="${price}">Продати</button>
                 `;
                 grid.appendChild(div);
             }
             document.querySelectorAll(".sell-button").forEach(btn => {
                 btn.addEventListener("click", async (e) => {
                     const name = btn.dataset.name;
-                    const price = itemPrices[name];
+                    const price = parseInt(btn.dataset.price);
                     if (!price) return;
+                    
+                    // Вікно підтвердження продажу
+                    const userConfirmed = confirm(`Продати ${name} за ${price} монет?`);
+                    if (!userConfirmed) return;
+
                     const itemDiv = btn.closest(".inventory-item");
                     itemDiv.classList.add("removing");
                     await new Promise(r => setTimeout(r, 250));
