@@ -4,7 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Вибір кейсів | MyKarateGame</title>
+    <!-- PWA підтримка -->
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KarateGame">
+<link rel="apple-touch-icon" href="logo.png">
     <style>
+        :root {
+    --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --bg-card: rgba(255, 255, 255, 0.95);
+    --text-primary: #333;
+    --shadow: 0 25px 45px rgba(0,0,0,0.2);
+}
+[data-theme="dark"] {
+    --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    --bg-card: rgba(30, 30, 50, 0.95);
+    --text-primary: #eee;
+    --shadow: 0 25px 45px rgba(0,0,0,0.5);
+}
         * {
             margin: 0;
             padding: 0;
@@ -15,7 +33,8 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg-primary);
+    transition: background 0.3s;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -58,13 +77,13 @@
         .container {
             max-width: 900px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--bg-card);
             backdrop-filter: blur(2px);
             border-radius: 50px;
             padding: 30px 20px;
             text-align: center;
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s;
+            box-shadow: var(--shadow);
+    transition: background 0.3s, box-shadow 0.3s;
         }
 
         h1 {
@@ -246,5 +265,15 @@
 
         updateCoinDisplay();
     </script>
+    <script>
+    (function() {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+        }
+    })();
+</script>
 </body>
 </html>

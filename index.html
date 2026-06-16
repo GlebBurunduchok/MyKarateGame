@@ -4,13 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>MyKarateGame - Кейси</title>
-    <link rel="icon" type="image/png" href="logo.png">
+    <!-- PWA підтримка -->
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KarateGame">
+<link rel="apple-touch-icon" href="logo.png">
     <link rel="apple-touch-icon" href="logo.png">
     <style>
+        :root {
+    --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --bg-card: rgba(255, 255, 255, 0.95);
+    --text-primary: #333;
+    --shadow: 0 25px 45px rgba(0,0,0,0.2);
+}
+[data-theme="dark"] {
+    --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    --bg-card: rgba(30, 30, 50, 0.95);
+    --text-primary: #eee;
+    --shadow: 0 25px 45px rgba(0,0,0,0.5);
+}
         * { margin: 0; padding: 0; box-sizing: border-box; touch-action: manipulation; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeInPage 0.8s ease-out; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh; background: var(--bg-primary);
+    transition: background 0.3s; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeInPage 0.8s ease-out; }
         @keyframes fadeInPage { from { opacity: 0; } to { opacity: 1; } }
-        .container { max-width: 800px; width: 100%; margin: 0 auto; padding: 30px 20px; background: rgba(255, 255, 255, 0.95); border-radius: 50px; box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2); backdrop-filter: blur(2px); text-align: center; }
+        .container {
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 30px 20px;
+    background: var(--bg-card);
+    border-radius: 50px;
+    box-shadow: var(--shadow);
+    transition: background 0.3s, box-shadow 0.3s;
+    backdrop-filter: blur(2px);
+    text-align: center;
+}
         h1 { font-size: 2rem; margin-bottom: 30px; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; background-clip: text; color: transparent; animation: titlePulse 2s infinite; }
         @keyframes titlePulse { 0%,100% { text-shadow: 0 0 5px rgba(102,126,234,0.3); transform: scale(1); } 50% { text-shadow: 0 0 20px rgba(102,126,234,0.6); transform: scale(1.02); } }
         .menu { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 25px; }
@@ -72,5 +101,15 @@
         if (localStorage.getItem("coins") === null) localStorage.setItem("coins", "500");
         if (localStorage.getItem("inventory") === null) localStorage.setItem("inventory", "[]");
     </script>
+    <script>
+    (function() {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+        }
+    })();
+</script>
 </body>
 </html>

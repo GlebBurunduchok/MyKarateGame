@@ -4,11 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Клікер | MyKarateGame</title>
+    <!-- PWA підтримка -->
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KarateGame">
+<link rel="apple-touch-icon" href="logo.png">
     <style>
+        :root {
+    --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --bg-card: rgba(255, 255, 255, 0.95);
+    --text-primary: #333;
+    --shadow: 0 25px 45px rgba(0,0,0,0.2);
+}
+[data-theme="dark"] {
+    --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    --bg-card: rgba(30, 30, 50, 0.95);
+    --text-primary: #eee;
+    --shadow: 0 25px 45px rgba(0,0,0,0.5);
+}
         * { margin: 0; padding: 0; box-sizing: border-box; touch-action: manipulation; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.5s ease-out; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh; background: var(--bg-primary);
+    transition: background 0.3s; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.5s ease-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .container { max-width: 500px; width: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(4px); border-radius: 70px; padding: 40px 20px; text-align: center; box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2); }
+        .container { max-width: 500px; width: 100%; background: var(--bg-card); backdrop-filter: blur(4px); border-radius: 70px; padding: 40px 20px; text-align: center; box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2); }
         h1 { font-size: 2.2rem; margin-bottom: 20px; background: linear-gradient(135deg, #f093fb, #f5576c); -webkit-background-clip: text; background-clip: text; color: transparent; animation: titleGlow 2s infinite; }
         @keyframes titleGlow { 0%,100% { text-shadow: 0 0 5px rgba(240,147,251,0.3); } 50% { text-shadow: 0 0 20px rgba(240,147,251,0.6); } }
         .click-image { width: 220px; cursor: pointer; transition: transform 0.1s ease; filter: drop-shadow(0 15px 20px rgba(0,0,0,0.3)); animation: floatCoin 3s infinite ease-in-out; }
@@ -64,5 +83,15 @@
         });
         updateDisplay();
     </script>
+    <script>
+    (function() {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+        }
+    })();
+</script>
 </body>
 </html>
