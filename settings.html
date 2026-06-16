@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Налаштування | MyKarateGame</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; touch-action: manipulation; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .container { max-width: 600px; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(4px); border-radius: 50px; padding: 40px 30px; text-align: center; box-shadow: 0 25px 45px rgba(0,0,0,0.2); }
+        h1 { font-size: 2.2rem; margin-bottom: 30px; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        p { font-size: 1.2rem; color: #333; margin-bottom: 20px; }
+        .nav-buttons { position: fixed; top: 20px; left: 20px; display: flex; gap: 10px; z-index: 20; }
+        .nav-btn { background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); color: white; border: none; padding: 8px 18px; border-radius: 40px; text-decoration: none; font-weight: bold; transition: all 0.3s ease; font-size: 1rem; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .nav-btn:hover { transform: translateX(-5px); background: rgba(0,0,0,0.8); }
+        @media (max-width: 600px) { .nav-buttons { top: 10px; left: 10px; } .nav-btn { font-size: 0.8rem; padding: 5px 12px; } .container { padding: 30px 20px; } h1 { font-size: 1.8rem; } }
+    </style>
+</head>
+<body>
+    <div class="nav-buttons">
+        <a href="index.html" class="nav-btn">← Назад</a>
+    </div>
+    <div class="container">
+        <h1>⚙️ Налаштування</h1>
+        <p>Тут будуть налаштування гри.</p>
+        <p>Наразі сторінка в розробці.</p>
+        <p>🎮 Насолоджуйтесь грою!</p>
+    </div>
+</body>
+</html>
