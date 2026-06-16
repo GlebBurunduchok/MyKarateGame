@@ -30,33 +30,6 @@
             to { opacity: 1; }
         }
 
-        /* Кнопка назад */
-        #backButton {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-            z-index: 20;
-            font-size: 1rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        #backButton:hover {
-            transform: translateX(-5px);
-            background: rgba(0, 0, 0, 0.8);
-        }
-
         /* Лічильник монет */
         #coinDisplay {
             position: fixed;
@@ -188,10 +161,52 @@
             #backButton, #coinDisplay { top: 15px; padding: 6px 14px; font-size: 0.9rem; }
             #coinDisplay img { width: 22px; }
         }
+        /* Кнопки навігації */
+.nav-buttons {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 20;
+}
+.nav-btn {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 40px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+.nav-btn:hover {
+    transform: translateX(-5px);
+    background: rgba(0, 0, 0, 0.8);
+}
+@media (max-width: 600px) {
+    .nav-buttons {
+        top: 10px;
+        left: 10px;
+    }
+    .nav-btn {
+        font-size: 0.8rem;
+        padding: 5px 12px;
+    }
+}
     </style>
 </head>
 <body>
-    <a href="index.html" id="backButton">← Назад</a>
+    <div class="nav-buttons">
+    <a href="index.html" class="nav-btn">← Назад</a>
+    <a href="settings.html" class="nav-btn">⚙️ Налаштування</a>
+</div>
     <div id="coinDisplay">
         <span id="coinCount">0</span>
         <img src="coin.png" alt="🪙">
