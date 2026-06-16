@@ -6,15 +6,224 @@
     <title>Налаштування | MyKarateGame</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; touch-action: manipulation; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.5s ease-out; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.5s ease-out;
+            transition: background 0.3s;
+        }
+        body.dark {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .container { max-width: 600px; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(4px); border-radius: 50px; padding: 40px 30px; text-align: center; box-shadow: 0 25px 45px rgba(0,0,0,0.2); }
-        h1 { font-size: 2.2rem; margin-bottom: 30px; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        p { font-size: 1.2rem; color: #333; margin-bottom: 20px; }
-        .nav-buttons { position: fixed; top: 20px; left: 20px; display: flex; gap: 10px; z-index: 20; }
-        .nav-btn { background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); color: white; border: none; padding: 8px 18px; border-radius: 40px; text-decoration: none; font-weight: bold; transition: all 0.3s ease; font-size: 1rem; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(4px);
+            border-radius: 50px;
+            padding: 30px 25px;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.2);
+            text-align: left;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        body.dark .container {
+            background: rgba(30, 30, 60, 0.95);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.6);
+        }
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            transition: 0.3s;
+        }
+        body.dark h1 {
+            background: linear-gradient(135deg, #a78bfa, #7c3aed);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        .setting-group {
+            background: rgba(0,0,0,0.03);
+            border-radius: 20px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            transition: background 0.3s;
+        }
+        body.dark .setting-group {
+            background: rgba(255,255,255,0.06);
+        }
+        .setting-group h2 { font-size: 1.1rem; margin-bottom: 12px; color: #333; }
+        body.dark .setting-group h2 { color: #ccc; }
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        body.dark .setting-row { border-bottom-color: rgba(255,255,255,0.05); }
+        .setting-row:last-child { border-bottom: none; }
+        .setting-row span { font-size: 1rem; color: #333; }
+        body.dark .setting-row span { color: #ddd; }
+        .stat-value { font-weight: bold; color: #667eea; }
+        body.dark .stat-value { color: #a78bfa; }
+
+        .btn {
+            padding: 8px 20px;
+            border-radius: 40px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-danger { background: #f44336; color: white; }
+        .btn-danger:hover { background: #d32f2f; transform: scale(1.02); }
+        .btn-secondary { background: #4CAF50; color: white; }
+        .btn-secondary:hover { background: #367c39; }
+
+        /* Перемикач теми */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 6px 14px 6px 6px;
+            border-radius: 40px;
+            background: rgba(0,0,0,0.05);
+            transition: background 0.3s;
+            user-select: none;
+        }
+        body.dark .theme-toggle {
+            background: rgba(255,255,255,0.08);
+        }
+        .theme-toggle .toggle-track {
+            width: 52px;
+            height: 28px;
+            background: #ccc;
+            border-radius: 14px;
+            position: relative;
+            transition: background 0.3s;
+            flex-shrink: 0;
+        }
+        body.dark .theme-toggle .toggle-track {
+            background: #4a4a6a;
+        }
+        .theme-toggle .toggle-track .thumb {
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        body.dark .theme-toggle .toggle-track .thumb {
+            left: 27px;
+            background: #f0f0f0;
+        }
+        .theme-toggle .theme-label {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #333;
+        }
+        body.dark .theme-toggle .theme-label {
+            color: #ddd;
+        }
+
+        /* Навігація */
+        .nav-buttons {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+        }
+        .nav-btn {
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
         .nav-btn:hover { transform: translateX(-5px); background: rgba(0,0,0,0.8); }
-        @media (max-width: 600px) { .nav-buttons { top: 10px; left: 10px; } .nav-btn { font-size: 0.8rem; padding: 5px 12px; } .container { padding: 30px 20px; } h1 { font-size: 1.8rem; } }
+
+        /* Футер */
+        .footer {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0,0,0,0.08);
+            text-align: center;
+            font-size: 0.85rem;
+            color: #888;
+            transition: 0.3s;
+        }
+        body.dark .footer {
+            border-top-color: rgba(255,255,255,0.08);
+            color: #777;
+        }
+        .footer .copy {
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+        .footer .copy span {
+            color: #667eea;
+        }
+        body.dark .footer .copy span {
+            color: #a78bfa;
+        }
+        .footer .made-by {
+            margin-top: 4px;
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+        .footer .made-by a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        body.dark .footer .made-by a {
+            color: #a78bfa;
+        }
+
+        .version {
+            text-align: center;
+            color: #999;
+            font-size: 0.8rem;
+            margin-top: 15px;
+        }
+        body.dark .version { color: #666; }
+
+        @media (max-width: 600px) {
+            .container { padding: 20px 15px; }
+            h1 { font-size: 1.6rem; }
+            .nav-buttons { top: 10px; left: 10px; }
+            .nav-btn { font-size: 0.8rem; padding: 5px 12px; }
+            .setting-group { padding: 12px 15px; }
+            .theme-toggle .toggle-track { width: 46px; height: 24px; }
+            .theme-toggle .toggle-track .thumb { width: 18px; height: 18px; top: 3px; left: 3px; }
+            body.dark .theme-toggle .toggle-track .thumb { left: 25px; }
+        }
     </style>
 </head>
 <body>
@@ -23,9 +232,148 @@
     </div>
     <div class="container">
         <h1>⚙️ Налаштування</h1>
-        <p>Тут будуть налаштування гри.</p>
-        <p>Наразі сторінка в розробці.</p>
-        <p>🎮 Насолоджуйтесь грою!</p>
+
+        <div class="setting-group">
+            <h2>🎨 Тема</h2>
+            <div class="setting-row">
+                <span>🌓 Світла / Темна</span>
+                <div class="theme-toggle" id="themeToggle">
+                    <div class="toggle-track">
+                        <div class="thumb"></div>
+                    </div>
+                    <span class="theme-label" id="themeLabel">Світла</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="setting-group">
+            <h2>📊 Статистика</h2>
+            <div class="setting-row"><span>💰 Монет:</span><span class="stat-value" id="statCoins">0</span></div>
+            <div class="setting-row"><span>🎒 Предметів:</span><span class="stat-value" id="statItems">0</span></div>
+            <div class="setting-row"><span>📦 Відкрито кейсів:</span><span class="stat-value" id="statCases">0</span></div>
+        </div>
+
+        <div class="setting-group">
+            <h2>🎮 Дії</h2>
+            <div class="setting-row">
+                <span>Скинути прогрес</span>
+                <button class="btn btn-danger" id="resetBtn">Скинути</button>
+            </div>
+            <div class="setting-row">
+                <span>Отримати бонус (50 🪙)</span>
+                <button class="btn btn-secondary" id="bonusBtn">+50 🪙</button>
+            </div>
+        </div>
+
+        <div class="setting-group">
+            <h2>🔊 Звук</h2>
+            <div class="setting-row">
+                <span>Звукові ефекти</span>
+                <div class="toggle" id="soundToggle"></div>
+            </div>
+        </div>
+
+        <div class="setting-group">
+            <h2>ℹ️ Про гру</h2>
+            <div class="setting-row"><span>Назва:</span><span>KarateCase</span></div>
+            <div class="setting-row"><span>Версія:</span><span>v1.0.0</span></div>
+        </div>
+
+        <!-- Футер з копірайтом -->
+        <div class="footer">
+            <div class="copy">© 2026 <span>KarateGame</span></div>
+            <div class="made-by">Зроблено з ❤️ для фанатів карате</div>
+        </div>
     </div>
+
+    <script>
+        // ===== ТЕМА =====
+        function getTheme() {
+            return localStorage.getItem('theme') || 'light';
+        }
+        function setTheme(theme) {
+            localStorage.setItem('theme', theme);
+            if (theme === 'dark') {
+                document.body.classList.add('dark');
+                document.getElementById('themeLabel').innerText = 'Темна';
+            } else {
+                document.body.classList.remove('dark');
+                document.getElementById('themeLabel').innerText = 'Світла';
+            }
+        }
+
+        // ===== ЗВУК =====
+        function getSoundEnabled() {
+            let s = localStorage.getItem('soundEnabled');
+            return s === null ? true : s === 'true';
+        }
+        function setSoundEnabled(val) {
+            localStorage.setItem('soundEnabled', val.toString());
+            updateSoundToggle();
+        }
+        function updateSoundToggle() {
+            const toggle = document.getElementById('soundToggle');
+            if (getSoundEnabled()) toggle.classList.add('active');
+            else toggle.classList.remove('active');
+        }
+
+        // ===== СТАТИСТИКА =====
+        function getCoins() {
+            let c = parseInt(localStorage.getItem('coins'));
+            if (isNaN(c)) { c = 500; localStorage.setItem('coins', c); }
+            return c;
+        }
+        function getInventory() {
+            let inv = JSON.parse(localStorage.getItem('inventory'));
+            if (!inv) { inv = []; localStorage.setItem('inventory', JSON.stringify(inv)); }
+            return inv;
+        }
+        function getCasesOpened() {
+            let c = parseInt(localStorage.getItem('casesOpened'));
+            if (isNaN(c)) { c = 0; localStorage.setItem('casesOpened', c); }
+            return c;
+        }
+        function updateStats() {
+            document.getElementById('statCoins').innerText = getCoins();
+            document.getElementById('statItems').innerText = getInventory().length;
+            document.getElementById('statCases').innerText = getCasesOpened();
+        }
+
+        // ===== ОБРОБНИКИ =====
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            const current = getTheme();
+            setTheme(current === 'light' ? 'dark' : 'light');
+        });
+
+        document.getElementById('soundToggle').addEventListener('click', function() {
+            setSoundEnabled(!getSoundEnabled());
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            if (confirm('⚠️ Ви впевнені, що хочете скинути весь прогрес?')) {
+                if (confirm('Останнє попередження: це безповоротно!')) {
+                    localStorage.setItem('coins', '500');
+                    localStorage.setItem('inventory', '[]');
+                    localStorage.setItem('casesOpened', '0');
+                    updateStats();
+                    alert('Прогрес скинуто!');
+                }
+            }
+        });
+
+        document.getElementById('bonusBtn').addEventListener('click', function() {
+            let coins = getCoins();
+            coins += 50;
+            localStorage.setItem('coins', coins);
+            updateStats();
+            alert('+50 🪙! Баланс: ' + coins);
+            if (navigator.vibrate) navigator.vibrate(50);
+        });
+
+        // ===== ЗАВАНТАЖЕННЯ =====
+        setTheme(getTheme());
+        updateSoundToggle();
+        updateStats();
+    </script>
 </body>
 </html>
